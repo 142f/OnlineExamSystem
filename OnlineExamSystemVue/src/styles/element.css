@@ -1,0 +1,108 @@
+/* Element UI 统一视觉：表格 / 按钮 / 表单 / 弹窗 / 分页 */
+.el-button {
+  border-radius: var(--oes-radius-sm);
+  font-weight: 500;
+}
+
+.el-button--primary {
+  background-color: var(--oes-primary);
+  border-color: var(--oes-primary);
+}
+
+.el-button--primary:hover,
+.el-button--primary:focus {
+  background-color: var(--oes-primary-hover);
+  border-color: var(--oes-primary-hover);
+}
+
+.el-input__inner,
+.el-textarea__inner,
+.el-select .el-input__inner {
+  border-radius: var(--oes-radius-sm);
+  border-color: var(--oes-border);
+}
+
+.el-input__inner:focus {
+  border-color: var(--oes-primary);
+}
+
+.el-card {
+  border-radius: var(--oes-radius);
+  border: 1px solid var(--oes-border);
+  box-shadow: var(--oes-shadow-sm) !important;
+}
+
+/* 表格：表头浅色底、行高统一、悬停高亮 */
+.el-table {
+  font-size: 13px;
+  color: var(--oes-text-secondary);
+}
+
+.el-table th.el-table__cell {
+  background: #f7f9fc !important;
+  color: var(--oes-text);
+  font-weight: 600;
+  height: 44px;
+  padding: 6px 0;
+}
+
+.el-table td.el-table__cell {
+  padding: 10px 0;
+}
+
+.el-table--enable-row-hover .el-table__body tr:hover > td.el-table__cell {
+  background: var(--oes-primary-light) !important;
+}
+
+.el-table::before {
+  display: none;
+}
+
+/* 弹窗 */
+.el-dialog {
+  border-radius: var(--oes-radius-lg);
+  overflow: hidden;
+}
+
+.el-dialog__header {
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--oes-border);
+}
+
+.el-dialog__title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.el-dialog__body {
+  padding: 20px 24px;
+}
+
+.el-dialog__footer {
+  padding: 12px 24px 20px;
+}
+
+/* 分页 */
+.el-pagination {
+  margin-top: var(--oes-space);
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 4px;
+}
+
+.el-pagination .el-pager li.active {
+  background-color: var(--oes-primary);
+  border-radius: var(--oes-radius-sm);
+  color: #fff;
+}
+
+/* 面包屑 */
+.el-breadcrumb {
+  font-size: 13px;
+}
+
+/* 消息提示圆角 */
+.el-message {
+  border-radius: var(--oes-radius-sm);
+}

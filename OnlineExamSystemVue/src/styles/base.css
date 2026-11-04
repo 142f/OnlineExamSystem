@@ -1,0 +1,98 @@
+/* 基础样式与通用布局工具类 */
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--oes-bg);
+  color: var(--oes-text);
+  font-family: "Microsoft YaHei", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--oes-primary);
+  text-decoration: none;
+}
+
+/* 页面容器：统一内边距与最大宽度 */
+.oes-page {
+  padding: var(--oes-space-lg);
+  box-sizing: border-box;
+}
+
+.oes-page-title {
+  margin: 0 0 var(--oes-space) 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--oes-text);
+}
+
+.oes-page-desc {
+  margin: -8px 0 var(--oes-space) 0;
+  color: var(--oes-text-muted);
+  font-size: 13px;
+}
+
+/* 卡片：统一圆角、阴影、留白 */
+.oes-card {
+  background: var(--oes-surface);
+  border-radius: var(--oes-radius);
+  box-shadow: var(--oes-shadow-sm);
+  padding: var(--oes-space-lg);
+  box-sizing: border-box;
+}
+
+.oes-card + .oes-card {
+  margin-top: var(--oes-space);
+}
+
+/* 工具栏：查询条件 / 操作按钮区 */
+.oes-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--oes-space-sm);
+  margin-bottom: var(--oes-space);
+}
+
+.oes-toolbar .el-input,
+.oes-toolbar .el-select {
+  width: 180px;
+}
+
+/* 表格卡片：去掉多余边距 */
+.oes-table-card .el-table {
+  border-radius: var(--oes-radius-sm);
+}
+
+/* 滚动条美化 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: #d5dbe6;
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #bcc6d6;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* 响应式：窄屏下减少内边距、隐藏次要列 */
+@media (max-width: 992px) {
+  .oes-page {
+    padding: var(--oes-space);
+  }
+  .oes-card {
+    padding: var(--oes-space);
+  }
+}

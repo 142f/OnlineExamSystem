@@ -1,0 +1,32 @@
+/* 设计令牌：颜色 / 间距 / 圆角 / 阴影 —— 全站统一引用 */
+:root {
+  --oes-primary: #3d7eff;
+  --oes-primary-hover: #5c93ff;
+  --oes-primary-light: #ecf3ff;
+  --oes-success: #22c55e;
+  --oes-warning: #f59e0b;
+  --oes-danger: #ef4444;
+
+  --oes-text: #1f2937;
+  --oes-text-secondary: #4b5563;
+  --oes-text-muted: #9ca3af;
+
+  --oes-bg: #f4f6fb;
+  --oes-surface: #ffffff;
+  --oes-border: #e8ecf3;
+
+  --oes-radius-sm: 6px;
+  --oes-radius: 10px;
+  --oes-radius-lg: 14px;
+
+  --oes-shadow-sm: 0 1px 3px rgba(16, 24, 40, 0.06);
+  --oes-shadow: 0 4px 16px rgba(16, 24, 40, 0.08);
+  --oes-shadow-lg: 0 12px 32px rgba(16, 24, 40, 0.12);
+
+  --oes-space-xs: 8px;
+  --oes-space-sm: 12px;
+  --oes-space: 16px;
+  --oes-space-lg: 24px;
+
+  --oes-header-height: 64px;
+}

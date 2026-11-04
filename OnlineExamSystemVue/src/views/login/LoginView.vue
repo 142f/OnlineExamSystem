@@ -157,137 +157,117 @@
 </script>
 
 <style lang="less" scoped>
-	.remind {
-		border-radius: 4px;
-		padding: 10px 20px;
-		display: flex;
-		position: fixed;
-		right: 20px;
-		bottom: 50%;
-		flex-direction: column;
-		color: #606266;
-		background-color: #fff;
-		border-left: 4px solid #409eff;
-		box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-	}
+#login {
+	font-size: 14px;
+	color: #000;
+	background-color: #fff;
+	min-height: 100vh;
+}
 
-	.container {
-		margin-bottom: 32px;
-	}
+#login .bg {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	overflow-y: auto;
+	height: 100%;
+	background: url("../../assets/img/loginbg.png") center top / cover no-repeat;
+	background-color: #b6bccdd1 !important;
+}
 
-	.title-icon {
-		font-size: 44px;
-		margin-right: 10px;
-	}
+#login .main-container {
+	position: relative;
+	z-index: 2;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: calc(100vh - 120px);
+}
 
-	.container .el-radio-group {
-		margin: 30px 0px;
-	}
+#login .main-container .top {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 18px;
+	font-size: 26px;
+	font-weight: 700;
+	letter-spacing: 2px;
+	color: #1f2d5a;
+	text-shadow: 0 2px 6px rgba(255, 255, 255, 0.6);
+}
 
-	a:link {
-		color: #ff962a;
-		text-decoration: none;
-	}
+#login .top .title-icon {
+	font-size: 34px;
+	margin-right: 10px;
+	color: #3d7eff;
+}
 
-	#login {
-		font-size: 14px;
-		color: #000;
-		background-color: #fff;
-	}
+#login .bottom {
+	display: flex;
+	justify-content: center;
+	background: rgba(255, 255, 255, 0.96);
+	border-radius: 16px;
+	padding: 32px 36px 26px;
+	box-shadow: 0 18px 48px rgba(31, 45, 90, 0.18);
+	backdrop-filter: blur(6px);
+}
 
-	#login .bg {
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100%;
-		overflow-y: auto;
-		height: 100%;
-		background: url("../../assets/img/loginbg.png") center top / cover no-repeat;
-		background-color: #b6bccdd1 !important;
-	}
+#login .bottom .container {
+	width: 100%;
+	min-width: 320px;
+}
 
-	#login .main-container {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-	}
+#login .bottom .title {
+	margin: 4px 0 24px;
+	font-size: 22px;
+	font-weight: 600;
+	text-align: center;
+	color: #1f2d5a;
+}
 
-	#login .main-container .top {
-		margin-top: 100px;
-		font-size: 30px;
-		color: #ff962a;
-		display: flex;
-		justify-content: center;
-	}
+#login .bottom .el-form-item {
+	margin-bottom: 22px;
+}
 
-	#login .top .icon-kaoshi {
-		font-size: 80px;
-	}
+#login .bottom .el-input__inner {
+	height: 42px;
+	line-height: 42px;
+	border-radius: 8px;
+}
 
-	#login .top .title {
-		margin-top: 20px;
-	}
+#login .bottom .submit {
+	display: flex;
+	justify-content: center;
+	margin-top: 8px;
+}
 
+#login .bottom .submit .row-login {
+	width: 100%;
+	height: 46px;
+	font-size: 16px;
+	letter-spacing: 4px;
+	border: none;
+	border-radius: 8px;
+	background: linear-gradient(90deg, #2b4de0 0%, #3d7eff 100%);
+	box-shadow: 0 8px 18px rgba(61, 126, 255, 0.32);
+}
+
+#login .bottom .submit .row-login:hover {
+	opacity: 0.92;
+}
+
+#login .footer {
+	margin-top: 24px;
+	padding-bottom: 24px;
+	text-align: center;
+}
+
+@media (max-width: 768px) {
 	#login .bottom {
-		display: flex;
-		justify-content: center;
-		background-color: #fff;
-		border-radius: 5px;
-		box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+		padding: 24px;
 	}
-
-	#login .bottom .title {
-		text-align: center;
-		font-size: 30px;
+	#login .bottom .container {
+		min-width: 0;
 	}
-
-	.bottom .container .title {
-		margin: 30px 0px;
-	}
-
-	.bottom .submit .row-login {
-		width: 100%;
-		margin: 20px 0px 10px 0px;
-		padding: 15px 20px;
-		background-color: rgb(133, 174, 191);
-		border-color: rgb(133, 174, 191);
-		color: white
-	}
-
-	.bottom .submit {
-		display: flex;
-		justify-content: center;
-	}
-
-	.footer {
-		margin-top: 50px;
-		text-align: center;
-	}
-
-	.footer .msg1 {
-		font-size: 18px;
-		color: #fff;
-		margin-bottom: 15px;
-	}
-
-	.footer .msg2 {
-		font-size: 14px;
-		color: #e3e3e3;
-		margin-top: 70px;
-	}
-
-	.bottom .options {
-		margin-bottom: 40px;
-		color: #ff962a;
-		display: flex;
-		justify-content: space-between;
-	}
-
-	.bottom .options>a {
-		color: #ff962a;
-	}
-
-	.bottom .options .register span:nth-child(1) {
-		color: #8c8c8c;
-	}
+}
 </style>

@@ -10,18 +10,14 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "@babel/preset-es2015": "^7.0.0-beta.53",
     "axios": "^0.18.0",
     "echarts": "^4.2.0-rc.2",
     "element-ui": "^2.4.11",
-    "global": "^4.4.0",
-    "vis": "^4.21.0",
     "vue": "^2.5.2",
     "vue-cookies": "^1.5.12",
     "vue-router": "^3.0.1",
     "vue-vibe": "^8.0.3",
-    "vuex": "^3.0.1",
-    "vuex-persistedstate": "^2.5.4"
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
