@@ -1,161 +1,127 @@
-<!--
- * @Description: 
- * @Author: Rabbiter
- * @Date: 2023-03-08 20:38:49
--->
-<!-- 添加学生 -->
 <template>
-  <section class="add">
-    <el-form ref="form" :model="form" label-width="80px">
-      <el-form-item label="姓名">
-        <el-input v-model="form.studentName"></el-input>
-      </el-form-item>
-      <el-form-item label="性别">
-        <el-input v-model="form.sex"></el-input>
-      </el-form-item>
-      <el-form-item label="学院">
-        <el-input v-model="form.institute"></el-input>
-      </el-form-item>
-      <el-form-item label="所属专业">
-        <el-input v-model="form.major"></el-input>
-      </el-form-item>
-      <el-form-item label="年级">
-        <el-input v-model="form.grade"></el-input>
-      </el-form-item>
-      <el-form-item label="班级">
-        <el-input v-model="form.clazz"></el-input>
-      </el-form-item>
-      <el-form-item label="电话号码">
-        <el-input v-model="form.tel"></el-input>
-      </el-form-item>
-      <el-form-item label="身份证号">
-        <el-input v-model="form.cardId"></el-input>
-      </el-form-item>
-      <el-form-item label="邮箱">
-        <el-input v-model="form.email"></el-input>
-      </el-form-item>
-      <el-form-item label="密码">
-        <el-input v-model="form.pwd"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit()"> 立即创建</el-button>
-        <el-button type="danger" @click="cancel()"> 取消</el-button>
-      </el-form-item>
-    </el-form>
-  </section>
+  <div class="oes-page">
+    <PageHeader title="添加学生" subtitle="创建学生账号，初始密码用于学生首次登录">
+      <template #actions>
+        <el-button icon="el-icon-back" @click="back()">返回列表</el-button>
+      </template>
+    </PageHeader>
+
+    <div class="oes-card form-card">
+      <el-form ref="form" :model="form" :rules="rules" label-width="100px">
+        <el-row :gutter="16">
+          <el-col :span="12">
+            <el-form-item label="姓名" prop="studentName"><el-input v-model="form.studentName" placeholder="请输入姓名" /></el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="性别" prop="sex">
+              <el-radio-group v-model="form.sex">
+                <el-radio label="男">男</el-radio>
+                <el-radio label="女">女</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="学院" prop="institute"><el-input v-model="form.institute" placeholder="如：软件工程学院" /></el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="专业" prop="major"><el-input v-model="form.major" placeholder="如：软件工程" /></el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="年级" prop="grade"><el-input v-model="form.grade" placeholder="如：2024" /></el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="班级" prop="clazz"><el-input v-model="form.clazz" placeholder="如：1" /></el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="联系方式" prop="tel"><el-input v-model="form.tel" placeholder="手机号" /></el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="身份证号" prop="cardId"><el-input v-model="form.cardId" placeholder="18 位身份证号" /></el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="邮箱" prop="email"><el-input v-model="form.email" placeholder="用于接收通知" /></el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="初始密码" prop="pwd"><el-input v-model="form.pwd" type="password" show-password placeholder="学生登录密码" /></el-form-item>
+          </el-col>
+        </el-row>
+
+        <div class="form-actions">
+          <el-button @click="back()">取 消</el-button>
+          <el-button type="primary" :loading="submitting" @click="onSubmit()">立即创建</el-button>
+        </div>
+      </el-form>
+    </div>
+  </div>
 </template>
 
 <script>
+import PageHeader from '@/components/common/PageHeader'
+
 export default {
+  components: { PageHeader },
   data() {
     return {
-      form: { //表单数据初始化
-        studentName: null,
-        grade: null,
-        major: null,
-        clazz: null,
-        institute: null,
-        tel: null,
-        email: null,
-        pwd: null,
-        cardId: null,
-        sex: null,
+      submitting: false,
+      form: {
+        studentName: '',
+        grade: '',
+        major: '',
+        clazz: '',
+        institute: '',
+        tel: '',
+        email: '',
+        pwd: '',
+        cardId: '',
+        sex: '男',
         role: 2
+      },
+      rules: {
+        studentName: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
+        institute: [{ required: true, message: '请输入学院', trigger: 'blur' }],
+        major: [{ required: true, message: '请输入专业', trigger: 'blur' }],
+        grade: [{ required: true, message: '请输入年级', trigger: 'blur' }],
+        clazz: [{ required: true, message: '请输入班级', trigger: 'blur' }],
+        tel: [{ required: true, message: '请输入联系方式', trigger: 'blur' }],
+        pwd: [{ required: true, message: '请输入初始密码', trigger: 'blur' }]
       }
-    };
+    }
   },
   methods: {
-    onSubmit() { //数据提交
-      if (this.form.studentName == null || this.form.studentName.trim() == "") {
-        this.$message({
-          message: '请输入姓名',
-          type: 'error'
-        })
-        return
-      }
-      if (this.form.grade == null || this.form.grade.trim() == "") {
-        this.$message({
-          message: '请输入年级',
-          type: 'error'
-        })
-        return
-      }
-      if (this.form.major == null || this.form.major.trim() == "") {
-        this.$message({
-          message: '请输入专业',
-          type: 'error'
-        })
-        return
-      }
-      if (this.form.clazz == null || this.form.clazz.trim() == "") {
-        this.$message({
-          message: '请输入班级',
-          type: 'error'
-        })
-        return
-      }
-      if (this.form.institute == null || this.form.institute.trim() == "") {
-        this.$message({
-          message: '请输入学院',
-          type: 'error'
-        })
-        return
-      }
-      if (this.form.tel == null || this.form.tel.trim() == "") {
-        this.$message({
-          message: '请输入手机号码',
-          type: 'error'
-        })
-        return
-      }
-      if (this.form.email == null || this.form.email.trim() == "") {
-        this.$message({
-          message: '请输入邮箱',
-          type: 'error'
-        })
-        return
-      }
-      if (this.form.pwd == null || this.form.pwd.trim() == "") {
-        this.$message({
-          message: '请输入密码',
-          type: 'error'
-        })
-        return
-      }
-      if (this.form.sex == null || this.form.sex.trim() == "") {
-        this.$message({
-          message: '请输入性别',
-          type: 'error'
-        })
-        return
-      }
-      this.$axios({
-        url: '/api/student',
-        method: 'post',
-        data: {
-          ...this.form
-        }
-      }).then(res => {
-        if (res.data.code == 200) {
-          this.$message({
-            message: '数据添加成功',
-            type: 'success'
+    onSubmit() {
+      this.$refs.form.validate(valid => {
+        if (!valid) return
+        this.submitting = true
+        this.$axios({ url: '/api/student', method: 'post', data: { ...this.form } })
+          .then(res => {
+            if (res.data.code == 200) {
+              this.$message.success('学生创建成功')
+              this.$router.push({ path: '/studentManage' })
+            } else {
+              this.$message.error(res.data.message || '创建失败')
+            }
           })
-          this.$router.push({ path: '/studentManage' })
-        }
+          .catch(() => this.$message.error('创建失败'))
+          .finally(() => {
+            this.submitting = false
+          })
       })
     },
-    cancel() { //取消按钮
-      this.form = {}
-    },
-
+    back() {
+      this.$router.push({ path: '/studentManage' })
+    }
   }
-};
+}
 </script>
-<style lang="less" scoped>
-.add {
-  padding: 0px 40px;
-  width: 400px;
+
+<style scoped>
+.form-card {
+  max-width: 900px;
+}
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 8px;
 }
 </style>
-

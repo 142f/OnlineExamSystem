@@ -1,142 +1,107 @@
-//查询所有题库
 <template>
-  <div class="exam">
-    <el-form :inline="true" class="demo-form-inline">
-      <el-form-item label="作业名称">
-        <el-input v-model="subject" placeholder="作业名称"></el-input>
-      </el-form-item>
-      <el-form-item label="章节">
-        <el-input v-model="section" placeholder="章节"></el-input>
-      </el-form-item>
-      <el-form-item label="题目内容">
-        <el-input v-model="question" placeholder="题目内容"></el-input>
-      </el-form-item><br>
-      <el-form-item>
-        <el-button type="primary" @click="getAnswerInfo"  style="font-size: 20px;"> 查询</el-button>
-      </el-form-item>
-    </el-form>
+  <div class="oes-page">
+    <PageHeader title="题目列表" subtitle="按作业、章节与题干检索题库内容">
+      <template #actions>
+        <el-button type="primary" icon="el-icon-plus" @click="$router.push('/addAnswer')">新增题目</el-button>
+      </template>
+    </PageHeader>
 
-    <el-table :data="pagination.records" border :row-class-name="tableRowClassName">
-      <el-table-column fixed="left" prop="subject" label="作业名称" width="180"></el-table-column>
-      <el-table-column prop="question" label="题目信息" width="490"></el-table-column>
-      <el-table-column prop="section" label="所属章节" width="200"></el-table-column>
-      <el-table-column prop="type" label="题目类型" width="200"></el-table-column>
-      <el-table-column prop="score" label="试题分数" width="150"></el-table-column>
-      <el-table-column prop="level" label="难度等级" width="133"></el-table-column>
-      <el-table-column fixed="right" label="操作" width="160">
-        <template slot-scope="scope">
-          <el-button @click="toEdit(scope.row.type, scope.row.questionId)" type="primary" > 编辑</el-button>
+    <div class="oes-toolbar">
+      <el-input v-model="subject" placeholder="作业名称" clearable />
+      <el-input v-model="section" placeholder="章节" clearable />
+      <el-input v-model="question" placeholder="题目内容关键字" clearable />
+      <el-button type="primary" icon="el-icon-search" @click="search()">查询</el-button>
+      <el-button icon="el-icon-refresh-left" @click="reset()">重置</el-button>
+    </div>
+
+    <div class="oes-table-card">
+      <el-table v-loading="loading" :data="pagination.records" size="medium">
+        <el-table-column prop="subject" label="作业名称" width="160" show-overflow-tooltip />
+        <el-table-column prop="question" label="题目信息" min-width="320" show-overflow-tooltip />
+        <el-table-column prop="section" label="章节" width="120" />
+        <el-table-column prop="type" label="类型" width="110">
+          <template slot-scope="scope">
+            <span class="oes-tag">{{ scope.row.type }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="score" label="分值" width="80" align="center" />
+        <el-table-column prop="level" label="难度" width="80" align="center" />
+        <el-table-column label="操作" width="100" fixed="right">
+          <template slot-scope="scope">
+            <el-button type="text" icon="el-icon-edit" @click="toEdit(scope.row.type, scope.row.questionId)">编辑</el-button>
+          </template>
+        </el-table-column>
+        <template slot="empty">
+          <EmptyState text="题库中暂无匹配的题目" />
         </template>
-      </el-table-column>
-    </el-table>
-    <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="pagination.current"
-      :page-sizes="[6, 10]"
-      :page-size="pagination.size"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="pagination.total"
-      class="page"
-    ></el-pagination>
+      </el-table>
+
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="pagination.current"
+        :page-sizes="[6, 10]"
+        :page-size="pagination.size"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="pagination.total">
+      </el-pagination>
+    </div>
   </div>
 </template>
 
 <script>
+import PageHeader from '@/components/common/PageHeader'
+import EmptyState from '@/components/common/EmptyState'
+
 export default {
+  components: { PageHeader, EmptyState },
   data() {
     return {
-      pagination: {
-        //分页后的作业信息
-        current: 1, //当前页
-        total: null, //记录条数
-        size: 6 //每页条数
-
-      },
-      section: "",
-      subject: "",
-      question: "",
-    };
+      loading: false,
+      pagination: { current: 1, total: null, size: 6, records: [] },
+      section: '',
+      subject: '',
+      question: ''
+    }
   },
   created() {
-    this.getAnswerInfo();
+    this.getAnswerInfo()
   },
   methods: {
-    toEdit(type, id) { 
-      // 前往编辑题目
-      this.$router.push({path:'/editAnswerChildren',query: {type: type, questionId: id}})
+    toEdit(type, id) {
+      this.$router.push({ path: '/editAnswerChildren', query: { type: type, questionId: id } })
     },
     getAnswerInfo(size, current) {
-      //分页查询所有试卷信息
-      if(typeof size === 'number' && !isNaN(size)) {
-        this.pagination.size = size;
-      }
-      if(typeof current === 'number' && !isNaN(current)) {
-        this.pagination.current = current;
-      } else {
-        this.pagination.current = 1;
-      }
-      var subject = this.subject;
-      if(this.subject.trim() == "") {
-        subject = "@";
-      }
-      var section = this.section;
-      if(this.section.trim() == "") {
-        section = "@";
-      }
-      var question = this.question;
-      if(this.question.trim() == "") {
-        question = "@";
-      }
+      if (typeof size === 'number' && !isNaN(size)) this.pagination.size = size
+      this.pagination.current = (typeof current === 'number' && !isNaN(current)) ? current : 1
+      const fmt = v => (v.trim() === '' ? '@' : v)
+      this.loading = true
       this.$axios(
-        `/api/answers/${this.pagination.current}/${this.pagination.size}/${subject}/${section}/${question}`
+        `/api/answers/${this.pagination.current}/${this.pagination.size}/${fmt(this.subject)}/${fmt(this.section)}/${fmt(this.question)}`
       )
         .then(res => {
-          this.pagination = res.data.data;
+          this.pagination = res.data.data
         })
-        .catch(error => {});
+        .catch(() => {})
+        .finally(() => {
+          this.loading = false
+        })
     },
-    //改变当前记录条数
+    search() {
+      this.getAnswerInfo(this.pagination.size, 1)
+    },
+    reset() {
+      this.subject = ''
+      this.section = ''
+      this.question = ''
+      this.search()
+    },
     handleSizeChange(val) {
-      this.getAnswerInfo(val);
+      this.getAnswerInfo(val, 1)
     },
-    //改变当前页码，重新发送请求
     handleCurrentChange(val) {
-      this.getAnswerInfo(undefined, val);
-    },
-    tableRowClassName({ row, rowIndex }) {
-      if (rowIndex % 2 == 0) {
-        return "warning-row";
-      } else {
-        return "success-row";
-      }
+      this.getAnswerInfo(this.pagination.size, val)
     }
   }
-};
-</script>
-<style lang="less" scoped>
-.exam {
-  padding: 0px 40px;
-  .page {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  .edit {
-    margin-left: 20px;
-  }
-  .el-table tr {
-    background-color: #DD5862 !important;
-  }
 }
-  .el-table .warning-row {
-    background: #000 !important;
-    
-  }
-
-  .el-table .success-row {
-    background: #DD5862;
-  }
-
-</style>
+</script>

@@ -1,6 +1,12 @@
 //查询所有作业
 <template>
-	<div class="exam">
+	<div class="exam oes-page">
+		<PageHeader title="作业查询" subtitle="查看作业详情、编辑作业信息或删除作业">
+			<template #actions>
+				<el-button type="primary" icon="el-icon-plus" @click="$router.push('/addExam')">新建作业</el-button>
+			</template>
+		</PageHeader>
+		<div class="oes-table-card">
 		<el-table :data="pagination.records" border>
 			<el-table-column fixed="left" prop="source" label="作业名称" width="180"></el-table-column>
 			<el-table-column prop="description" label="介绍" width="200"></el-table-column>
@@ -14,13 +20,13 @@
 			<el-table-column prop="tips" label="作业提示" width="400"></el-table-column>
 			<el-table-column fixed="right" label="操作" width="420">
 				<template slot-scope="scope">
-					<el-button type="success" @click="getExamDetail(scope.row.examCode, scope.row.paperId)">
-						作业详情</el-button>
-					<el-button @click="edit(scope.row.examCode)" type="primary"> 编辑</el-button>
-					<el-button @click="deleteRecord(scope.row.examCode)" type="danger">删除</el-button>
+					<el-button type="text" icon="el-icon-view" @click="getExamDetail(scope.row.examCode, scope.row.paperId)">详情</el-button>
+					<el-button type="text" icon="el-icon-edit" @click="edit(scope.row.examCode)">编辑</el-button>
+					<el-button type="text" class="danger-text" icon="el-icon-delete" @click="deleteRecord(scope.row.examCode)">删除</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
+		</div>
 
 		<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
 			:current-page="pagination.current" :page-sizes="[4, 8, 10]" :page-size="pagination.size"
@@ -172,7 +178,10 @@
 </template>
 
 <script>
+import PageHeader from '@/components/common/PageHeader'
+
 	export default {
+  components: { PageHeader },
 		data() {
 			return {
 				form: {}, //保存点击以后当前试卷的信息
@@ -408,4 +417,7 @@
 			margin-left: 20px;
 		}
 	}
+.danger-text {
+	color: var(--oes-danger);
+}
 </style>

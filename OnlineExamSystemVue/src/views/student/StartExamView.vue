@@ -1,381 +1,170 @@
-// 我的作业页面
 <template>
-  <div id="myExam">
-    <div class="title" style="font-size: 24px;">
-      <i class="iconfont icon-r-edit" style="font-size: 32px;"></i>
-      试题练习
-    </div>
-    <div class="wrapper">
-      <ul class="top">
-        <li style="font-size: 20px;"><i style="font-size: 26px;margin-right: 10px;" class="iconfont icon-r-list"></i> 练习列表
-        </li>
-        <li class="search-li">
-          <div class="icon"><input type="text" placeholder="作业名称" class="search" v-model="key"><i
-              class="el-icon-search"></i></div>
-        </li>
-        <li><el-button type="primary" @click="search()"> 搜索作业</el-button></li>
-      </ul>
-      <ul class="paper" v-loading="loading">
-        <li class="item" v-for="(item, index) in pagination.records" :key="index" @click="toExamMsg(item)">
+	<div class="oes-page">
+		<PageHeader title="试题练习" subtitle="练习模式不计入成绩，可反复作答熟悉题型">
+			<template #actions>
+				<el-input v-model="key" placeholder="按作业名称搜索" prefix-icon="el-icon-search" clearable style="width: 220px" @keyup.enter.native="search()" />
+				<el-button type="primary" icon="el-icon-search" @click="search()">搜索</el-button>
+			</template>
+		</PageHeader>
 
-          <div style="font-size: 22px;">
-            <i class="iconfont icon-r-edit" style="font-size: 28px;"></i>
-            {{ item.source }}
-          </div>
-          <p class="name">{{ item.source }}-{{ item.description }}</p>
-          <div class="info">
-            <span>练习时间：{{ item.examDate.substr(0, 10) }}</span>
-            <span v-if="item.totalTime != null">限时{{ item.totalTime }}分钟</span>
-            <span>满分{{ item.totalScore }}分</span>
-          </div>
-        </li>
-      </ul>
-      <div class="pagination">
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-          :current-page="pagination.current" :page-sizes="[6, 10, 20, 40]" :page-size="pagination.size"
-          layout="total, sizes, prev, pager, next, jumper" :total="pagination.total">
-        </el-pagination>
-      </div>
-    </div>
-  </div>
+		<div v-loading="loading" class="exam-grid">
+			<div class="exam-card" v-for="(item, index) in pagination.records" :key="index" @click="toExamMsg(item)">
+				<div class="exam-card__top">
+					<span class="exam-card__subject">{{ item.source }}</span>
+					<span class="oes-tag oes-tag--success">满分 {{ item.totalScore }}</span>
+				</div>
+				<p class="exam-card__desc">{{ item.description || '暂无作业说明' }}</p>
+				<div class="exam-card__meta">
+					<span><i class="el-icon-date"></i> {{ (item.examDate || '').substr(0, 10) }}</span>
+					<span v-if="item.totalTime != null"><i class="el-icon-time"></i> 限时 {{ item.totalTime }} 分钟</span>
+				</div>
+				<div class="exam-card__footer">进入作业 <i class="el-icon-arrow-right"></i></div>
+			</div>
+			<EmptyState v-if="!loading && (!pagination.records || pagination.records.length === 0)" text="暂无可参加的作业" />
+		</div>
+
+		<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+			:current-page="pagination.current" :page-sizes="[6, 10, 20, 40]" :page-size="pagination.size"
+			layout="total, sizes, prev, pager, next, jumper" :total="pagination.total">
+		</el-pagination>
+	</div>
 </template>
 
 <script>
-export default {
-  // name: 'myExam'
-  data() {
-    return {
-      loading: false,
-      key: null, //搜索关键字
-      allExam: null, //所有作业信息
-      pagination: { //分页后的作业信息
-        current: 1, //当前页
-        total: null, //记录条数
-        size: 6 //每页条数
-      }
-    }
-  },
-  created() {
-    this.getExamInfo()
-    this.loading = true
-  },
-  // watch: {
+import PageHeader from '@/components/common/PageHeader'
+import EmptyState from '@/components/common/EmptyState'
 
-  // },
-  methods: {
-    //获取当前所有作业信息
-    getExamInfo() {
-      this.$axios(`/api/exams/${this.pagination.current}/${this.pagination.size}`).then(res => {
-        this.pagination = res.data.data
-        this.loading = false
-        console.log(this.pagination)
-      }).catch(error => {
-        console.log(error)
-      })
-    },
-    //改变当前记录条数
-    handleSizeChange(val) {
-      this.pagination.size = val
-      this.getExamInfo()
-    },
-    //改变当前页码，重新发送请求
-    handleCurrentChange(val) {
-      this.pagination.current = val
-      this.getExamInfo()
-    },
-    //搜索作业
-    search() {
-      this.$axios('/api/exams').then(res => {
-        if (res.data.code == 200) {
-          let allExam = res.data.data
-          let newPage = allExam.filter(item => {
-            return item.source.includes(this.key)
-          })
-          this.pagination.records = newPage
-        }
-      })
-    },
-    //跳转到试卷详情页
-    toExamMsg(exam) {
-      if (exam.examDate > this.formatDateNow()) {
-        this.$message({
-          message: "时间未到",
-          type: "error",
-        });
-        return;
-      }
-      this.$router.push({ path: '/examMsg', query: { examCode: exam.examCode } })
-    },
-    formatDateNow() {
-      var date = new Date(); // 当前日期时间
-      var year = date.getFullYear(); // 年份
-      var month = ('0' + (date.getMonth() + 1)).slice(-2); // 月份+1
-      var day = ('0' + date.getDate()).slice(-2); // 日
-      return year + '-' + month + '-' + day;
-    },
-  }
+export default {
+	components: { PageHeader, EmptyState },
+	data() {
+		return {
+			loading: false,
+			key: '',
+			pagination: { current: 1, total: null, size: 6, records: [] }
+		}
+	},
+	created() {
+		this.loading = true
+		this.getExamInfo()
+	},
+	methods: {
+		getExamInfo() {
+			this.$axios(`/api/exams/${this.pagination.current}/${this.pagination.size}`)
+				.then(res => {
+					this.pagination = res.data.data
+				})
+				.catch(() => {})
+				.finally(() => {
+					this.loading = false
+				})
+		},
+		handleSizeChange(val) {
+			this.pagination.size = val
+			this.getExamInfo()
+		},
+		handleCurrentChange(val) {
+			this.pagination.current = val
+			this.getExamInfo()
+		},
+		search() {
+			if (!this.key) {
+				this.getExamInfo()
+				return
+			}
+			this.loading = true
+			this.$axios('/api/exams').then(res => {
+				if (res.data.code == 200) {
+					const all = res.data.data || []
+					this.pagination.records = all.filter(item => (item.source || '').indexOf(this.key) >= 0)
+				}
+			}).finally(() => {
+				this.loading = false
+			})
+		},
+		toExamMsg(exam) {
+			if (exam.examDate > this.formatDateNow()) {
+				this.$message({ message: '练习时间未到', type: 'error' })
+				return
+			}
+			this.$router.push({ path: '/examMsg', query: { examCode: exam.examCode } })
+		},
+		formatDateNow() {
+			const d = new Date()
+			const m = ('0' + (d.getMonth() + 1)).slice(-2)
+			const day = ('0' + d.getDate()).slice(-2)
+			return `${d.getFullYear()}-${m}-${day}`
+		}
+	}
 }
 </script>
 
-
-<style lang="less" scoped>
-.pagination {
-  padding: 20px 0px 30px 0px;
-
-  .el-pagination {
-    display: flex;
-    justify-content: center;
-  }
+<style scoped>
+.exam-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  min-height: 120px;
 }
 
-.paper {
-  h4 {
-    cursor: pointer;
-  }
-}
-
-.paper .item a {
-  color: #000;
-}
-
-.wrapper .top .order {
-  cursor: pointer;
-}
-
-.wrapper .top .order:hover {
-  color: #0195ff;
-  border-bottom: 2px solid #0195ff;
-}
-
-.wrapper .top .order:visited {
-  color: #0195ff;
-  border-bottom: 2px solid #0195ff;
-}
-
-.item .info i {
-  margin-right: 5px;
-  color: #0195ff;
-}
-
-.item .info span {
-  margin-right: 14px;
-}
-
-.paper .item {
-  width: 380px;
-  border-radius: 4px;
-  padding: 20px 30px;
-  border: 1px solid #eee;
-  box-shadow: 0 0 4px 2px rgba(217, 222, 234, 0.3);
-  transition: all 0.6s ease;
-}
-
-.paper .item:hover {
-  box-shadow: 0 0 4px 2px rgba(140, 193, 248, 0.45);
-  transform: scale(1.03);
-}
-
-.paper .item .info {
-  font-size: 14px;
-  color: #88949b;
-}
-
-.paper .item .name {
-  font-size: 14px;
-  color: #88949b;
-}
-
-.paper * {
-  margin: 20px 0;
-}
-
-.wrapper .paper {
+.exam-card {
   display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  background: var(--oes-surface);
+  border-radius: var(--oes-radius);
+  border: 1px solid var(--oes-border);
+  box-shadow: var(--oes-shadow-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.top .el-icon-search {
-  position: absolute;
-  right: 10px;
-  top: 10px;
+.exam-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--oes-primary);
+  box-shadow: var(--oes-shadow);
 }
 
-.top .icon {
-  position: relative;
-}
-
-.wrapper .top {
-  border-bottom: 1px solid #eee;
-  margin-bottom: 20px;
-}
-
-#myExam .search-li {
-  margin-left: auto;
-}
-
-.top .search-li {
-  margin-left: auto;
-}
-
-.top li {
+.exam-card__top {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: 8px;
 }
 
-.top .search {
-  margin-left: auto;
-  padding: 10px;
-  border-radius: 4px;
-  border: 1px solid #eee;
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
-  transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+.exam-card__subject {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--oes-text);
 }
 
-.top .search:hover {
-  color: #0195ff;
-  border-color: #0195ff;
+.exam-card__desc {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--oes-text-secondary);
+  min-height: 42px;
 }
 
-.wrapper .top {
+.exam-card__meta {
   display: flex;
+  gap: 16px;
+  font-size: 12px;
+  color: var(--oes-text-muted);
 }
 
-.wrapper .top li {
-  margin: 20px;
-}
-
-#myExam {
-  width: 980px;
-  margin: 0 auto;
-}
-
-#myExam .title {
-  margin: 20px;
-}
-
-#myExam .wrapper {
-  background-color: #fff;
-}
-
-.wrapper .top .order {
-  cursor: pointer;
-}
-
-.wrapper .top .order:hover {
-  color: #0195ff;
-  border-bottom: 2px solid #0195ff;
-}
-
-.wrapper .top .order:visited {
-  color: #0195ff;
-  border-bottom: 2px solid #0195ff;
-}
-
-.item .info i {
-  margin-right: 5px;
-  color: #0195ff;
-}
-
-.item .info span {
-  margin-right: 14px;
-}
-
-.paper .item {
-  border-radius: 4px;
-  padding: 20px 30px;
-  border: 1px solid #eee;
-  box-shadow: 0 0 4px 2px rgba(217, 222, 234, 0.3);
-  transition: all 0.6s ease;
-}
-
-.item {
-  cursor: pointer;
-}
-
-.paper .item:hover {
-  box-shadow: 0 0 4px 2px rgba(140, 193, 248, 0.45)
-}
-
-.paper .item .info {
-  font-size: 14px;
-  color: #88949b;
-}
-
-.paper .item .name {
-  font-size: 14px;
-  color: #88949b;
-}
-
-.paper * {
-  margin: 20px 0;
-}
-
-.wrapper .paper {
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
-}
-
-.top .el-icon-search {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-}
-
-.top .icon {
-  position: relative;
-}
-
-.wrapper .top {
-  border-bottom: 1px solid #eee;
-}
-
-#myExam .search-li {
-  margin-left: auto;
-}
-
-.top .search-li {
-  margin-left: auto;
-}
-
-.top li {
+.exam-card__footer {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  padding-top: 10px;
+  font-size: 13px;
+  color: var(--oes-primary);
+  border-top: 1px dashed var(--oes-border);
 }
 
-.top .search {
-  margin-left: auto;
-  padding: 10px;
-  border-radius: 4px;
-  border: 1px solid #eee;
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
-  transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-}
-
-.top .search:hover {
-  color: #0195ff;
-  border-color: #0195ff;
-}
-
-.wrapper .top {
-  display: flex;
-}
-
-.wrapper .top li {
-  margin: 20px;
-}
-
-#myExam {
-  width: 980px;
-  margin: 0 auto;
-}
-
-#myExam .title {
-  margin: 20px;
-}
-
-#myExam .wrapper {
-  background-color: #fff;
+.exam-grid .oes-empty {
+  grid-column: 1 / -1;
 }
 </style>

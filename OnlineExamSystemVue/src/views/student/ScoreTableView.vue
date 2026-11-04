@@ -1,158 +1,118 @@
-//显示学生成绩
 <template>
-	<div class="table">
-		<p class="top-title"> 我的分数 {{ user.userId }}</p>
-		<section class="content-el">
-			<el-table ref="filterTable" :data="score" v-loading="loading">
+	<div class="oes-page">
+		<PageHeader title="我的分数" subtitle="按作业查看客观题、主观题与总分">
+			<template #actions>
+				<el-button icon="el-icon-refresh" @click="getScore()">刷新</el-button>
+			</template>
+		</PageHeader>
 
-				<el-table-column prop="answerDate" label="作业提交日期" width="180" sortable column-key="answerDate"
-					:filters="filter" :filter-method="filterHandler">
-				</el-table-column>
-				<el-table-column prop="subject" label="课程名称" width="180" filter-placement="bottom-end">
-					<!-- <template slot-scope="scope">
-						<el-tag>{{scope.row.subject}}</el-tag>
-					</template> -->
-				</el-table-column>
+		<div class="oes-stat-grid">
+			<StatCard label="考试次数" :value="pagination.total || 0" icon="el-icon-document" color="#3d7eff" />
+			<StatCard label="最高得分" :value="maxScore" icon="el-icon-trophy" color="#22c55e" />
+			<StatCard label="平均得分" :value="avgScore" icon="el-icon-data-line" color="#f59e0b" />
+		</div>
 
-				<el-table-column prop="etScore" label="客观题分数" width="140"></el-table-column>
-
-
-				<!-- todo主观题分数 -->
-				<el-table-column prop="dScore" label="主观题分数" width="140"></el-table-column>
-
-				<el-table-column label="得分总分" width="140">
+		<div class="oes-table-card">
+			<el-table ref="filterTable" :data="score" v-loading="loading" size="medium">
+				<el-table-column prop="answerDate" label="提交日期" width="150" sortable />
+				<el-table-column prop="subject" label="课程名称" min-width="160" />
+				<el-table-column prop="etScore" label="客观题" width="110" align="center" />
+				<el-table-column prop="dScore" label="主观题" width="110" align="center" />
+				<el-table-column label="得分总分" width="120" align="center">
 					<template slot-scope="scope">
-						<span>{{ scope.row.etScore + scope.row.dScore }}</span>
+						<span class="cell-strong">{{ (scope.row.etScore || 0) + (scope.row.dScore || 0) }}</span>
 					</template>
 				</el-table-column>
-
-				<el-table-column prop="score" label="试卷总分" width="140"></el-table-column>
-
-			<!-- 	<el-table-column label="是否及格" width="140">
+				<el-table-column prop="score" label="试卷满分" width="110" align="center" />
+				<el-table-column label="状态" width="100" align="center">
 					<template slot-scope="scope">
-						<el-tag :type="scope.row.ptScore == 1 ? 'success' : 'danger'" style="font-size: 18px;">
-							<i class="iconfont icon-r-yes" v-if="scope.row.ptScore == 1" style="font-size: 24px;"></i>
-							<i class="iconfont icon-r-no" v-if="scope.row.ptScore != 1" style="font-size: 24px;"></i>
-							{{scope.row.ptScore == 1 ? "及格" : "不及格"}}
-						</el-tag>
+						<span class="oes-tag oes-tag--success">已出分</span>
 					</template>
-				</el-table-column> -->
-				
-
+				</el-table-column>
+				<template slot="empty">
+					<EmptyState text="还没有成绩记录，完成一次作业后即可查看" />
+				</template>
 			</el-table>
-			<el-row type="flex" justify="center" align="middle" class="pagination">
-				<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-					:current-page="pagination.current" :page-sizes="[4,6,8,10]" :page-size="pagination.size"
-					layout="total, sizes, prev, pager, next, jumper" :total="pagination.total">
-				</el-pagination>
-			</el-row>
-		</section>
+
+			<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+				:current-page="pagination.current" :page-sizes="[4, 6, 8, 10]" :page-size="pagination.size"
+				layout="total, sizes, prev, pager, next, jumper" :total="pagination.total">
+			</el-pagination>
+		</div>
 	</div>
 </template>
 
 <script>
-	export default {
-		data() {
-			return {
-				pagination: { //分页后的留言列表
-					current: 1, //当前页
-					total: null, //记录条数
-					size: 10 //每页条数
-				},
-				user: {
-					//用户信息
-					userName: null,
-					userId: null,
-				},
-				loading: false, //加载标识符
-				score: [], //学生成绩
-				filter: null //过滤参数
-			}
-		},
-		created() {
-			this.getScore()
-			this.loading = true //数据加载则遮罩表格
-			this.getUserInfo();
-		},
-		methods: {
-			getTotalScore(etScore, dScore) {
-				// 计算总分
-				return etScore + dScore;
-			},
+import PageHeader from '@/components/common/PageHeader'
+import StatCard from '@/components/common/StatCard'
+import EmptyState from '@/components/common/EmptyState'
 
-			getUserInfo() {
-				//获取用户信息
-				let userName = this.$cookies.get("cname");
-				let userId = this.$cookies.get("cid");
-				this.user.userName = userName;
-				this.user.userId = userId;
-			},
-			getScore() {
-				let studentId = this.$cookies.get("cid")
-				this.$axios(`/api/score/${this.pagination.current}/${this.pagination.size}/${studentId}`).then(res => {
-					if (res.data.code == 200) {
-						this.loading = false //数据加载完成去掉遮罩
-						this.score = res.data.data.records
-						this.pagination = {
-							...res.data.data
-						}
-						// console.log(123)
-						// console.log(res.data)
-						// let mapVal = this.score.map((element, index) => { //通过map得到 filter:[{text,value}]形式的数组对象
-						// 	let newVal = {}
-						// 	newVal.text = element.answerDate
-						// 	newVal.value = element.answerDate
-						// 	return newVal
-						// })
-						// let hash = []
-						// const newArr = mapVal.reduce((item, next) => { //对新对象进行去重操作
-						// 	hash[next.text] ? '' : hash[next.text] = true && item.push(next);
-						// 	return item
-						// }, []);
-						// this.filter = newArr
-					}
-				})
-			},
-			//改变当前记录条数
-			handleSizeChange(val) {
-				this.pagination.size = val
-				this.getScore()
-			},
-			//改变当前页码，重新发送请求
-			handleCurrentChange(val) {
-				this.pagination.current = val
-				this.getScore()
-			},
-			formatter(row, column) {
-				return row.address;
-			},
-			filterTag(value, row) {
-				return row.tag === value;
-			},
-			filterHandler(value, row, column) {
-				const property = column["property"];
-				return row[property] === value;
-			}
+export default {
+	components: { PageHeader, StatCard, EmptyState },
+	data() {
+		return {
+			pagination: { current: 1, total: null, size: 10 },
+			user: { userName: null, userId: null },
+			loading: false,
+			score: []
 		}
-	};
+	},
+	computed: {
+		totals() {
+			return (this.score || []).map(s => (s.etScore || 0) + (s.dScore || 0))
+		},
+		maxScore() {
+			return this.totals.length ? Math.max(...this.totals) : '-'
+		},
+		avgScore() {
+			if (!this.totals.length) return '-'
+			return (this.totals.reduce((a, b) => a + b, 0) / this.totals.length).toFixed(1)
+		}
+	},
+	created() {
+		this.user.userId = this.$cookies.get('cid')
+		this.user.userName = this.$cookies.get('cname')
+		this.loading = true
+		this.getScore()
+	},
+	methods: {
+		getScore() {
+			// 未取到学号（cookie 缺失）时不做请求，避免触发 403
+			if (!this.user.userId) {
+				this.user.userId = this.$cookies.get('cid')
+			}
+			if (!this.user.userId) {
+				this.loading = false
+				this.$message.warning('登录状态已失效，请重新登录')
+				return
+			}
+			this.loading = true
+			this.$axios(`/api/score/${this.pagination.current}/${this.pagination.size}/${this.user.userId}`)
+				.then(res => {
+					const data = res.data.data || {}
+					this.score = data.records || []
+					this.pagination.total = data.total || 0
+				})
+				.catch(() => {})
+				.finally(() => {
+					this.loading = false
+				})
+		},
+		handleSizeChange(val) {
+			this.pagination.size = val
+			this.getScore()
+		},
+		handleCurrentChange(val) {
+			this.pagination.current = val
+			this.getScore()
+		}
+	}
+}
 </script>
 
-<style lang="less" scoped>
-	.pagination {
-		padding-top: 20px;
-	}
-
-	.table {
-		width: 980px;
-		margin: 0 auto;
-
-		.top-title {
-			margin: 20px;
-		}
-
-		.content-el {
-			background-color: #fff;
-			padding: 20px;
-		}
-	}
+<style scoped>
+.cell-strong {
+	font-weight: 600;
+	color: var(--oes-text);
+}
 </style>
