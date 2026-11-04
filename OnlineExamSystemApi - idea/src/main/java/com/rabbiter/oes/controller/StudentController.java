@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.rabbiter.oes.entity.ApiResult;
 import com.rabbiter.oes.entity.Student;
-import com.rabbiter.oes.serviceimpl.StudentServiceImpl;
+import com.rabbiter.oes.service.StudentService;
 import com.rabbiter.oes.util.ApiResultHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 public class StudentController {
 
     @Autowired
-    private StudentServiceImpl studentService;
+    private StudentService studentService;
 
 // todo  /students/{page}/{size}/{name}/{grade}/{tel}/{institute}/{major}/{clazz}")
     @GetMapping("/students/{page}/{size}/{name}/{grade}/{tel}/{institute}/{major}/{clazz}")
@@ -73,20 +73,5 @@ public class StudentController {
 
 
 
-
-    // TODO: 2023/3/17   批改页面
-    // TODO: 2024/4/27  目前不需要了 --
-
-    @GetMapping("/ab/{page}/{size}/{name}/{grade}/{tel}/{institute}/{major}/{clazz}")
-    public ApiResult findAll2(@PathVariable Integer page, @PathVariable Integer size,
-                              @PathVariable  String name, @PathVariable String grade,
-                              @PathVariable String tel, @PathVariable String institute,
-                              @PathVariable String major, @PathVariable String clazz) {
-        Page<Student> studentPage = new Page<>(page,size);
-        IPage<Student> res = studentService.findAll2(
-                studentPage, name, grade, tel, institute, major, clazz
-        );
-        return  ApiResultHandler.buildApiResult(200,"分页查询所有学生",res);
-    }
 
 }

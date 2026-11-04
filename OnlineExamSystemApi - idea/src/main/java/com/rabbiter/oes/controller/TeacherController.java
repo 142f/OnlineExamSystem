@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.rabbiter.oes.entity.ApiResult;
 import com.rabbiter.oes.entity.Teacher;
-import com.rabbiter.oes.serviceimpl.TeacherServiceImpl;
+import com.rabbiter.oes.service.TeacherService;
 import com.rabbiter.oes.util.ApiResultHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class TeacherController {
 
-    private TeacherServiceImpl teacherService;
+    private TeacherService teacherService;
     @Autowired
-    public TeacherController(TeacherServiceImpl teacherService){
+    public TeacherController(TeacherService teacherService){
         this.teacherService = teacherService;
     }
 

@@ -31,19 +31,6 @@ public class StudentServiceImpl implements StudentService {
     }
 
 
-    public IPage<Student> findAll2(
-            Page<Student> page, String name, String grade,
-            String tel, String institute, String major, String clazz) {
-        name = ("@".equals(name) ? "" : name);
-        grade = ("@".equals(grade) ? "" : grade);
-        tel = ("@".equals(tel) ? "" : tel);
-        institute = ("@".equals(institute) ? "" : institute);
-        major = ("@".equals(major) ? "" : major);
-        clazz = ("@".equals(clazz) ? "" : clazz);
-        return studentMapper.findAll2(page, name, grade, tel, institute, major, clazz);
-    }
-
-
     @Override
     public Student findById(Integer studentId) {
         return studentMapper.findById(studentId);

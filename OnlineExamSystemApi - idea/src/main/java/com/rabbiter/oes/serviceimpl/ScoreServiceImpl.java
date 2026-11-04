@@ -44,7 +44,6 @@ public class ScoreServiceImpl implements ScoreService {
 
     @Override
     public Integer updateMaxScore(ExamManage exammanage) {
-        System.out.println("----进入updateMaxScore");
         return scoreMapper.updateMaxScore(exammanage);
     }
 

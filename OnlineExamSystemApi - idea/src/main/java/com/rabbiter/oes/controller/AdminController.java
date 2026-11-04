@@ -2,7 +2,7 @@ package com.rabbiter.oes.controller;
 
 import com.rabbiter.oes.entity.Admin;
 import com.rabbiter.oes.entity.ApiResult;
-import com.rabbiter.oes.serviceimpl.AdminServiceImpl;
+import com.rabbiter.oes.service.AdminService;
 import com.rabbiter.oes.util.ApiResultHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -10,21 +10,19 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class AdminController {
 
-    private AdminServiceImpl adminService;
+    private AdminService adminService;
     @Autowired
-    public AdminController(AdminServiceImpl adminService){
+    public AdminController(AdminService adminService){
         this.adminService = adminService;
     }
 
     @GetMapping("/admins")
     public ApiResult findAll(){
-        System.out.println("查询全部");
         return ApiResultHandler.success(adminService.findAll());
     }
 
     @GetMapping("/admin/{adminId}")
     public ApiResult findById(@PathVariable("adminId") Integer adminId){
-        System.out.println("根据ID查找");
         return ApiResultHandler.success(adminService.findById(adminId));
     }
 

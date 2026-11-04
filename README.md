@@ -108,6 +108,56 @@ cd OnlineExamSystemVue
 npm run build                # 产物输出到 dist/
 ```
 
+
+### 5. 已有数据库的升级（重要）
+
+本仓库的 `online_exam.sql` 已补全早期导出脚本缺失的结构（`da`、`da_question` 表与 `score.dScore` 列）。
+如果你使用的是历史库，请先执行以下迁移，否则 `/exams`、`/score/{page}/{size}/{studentId}` 等接口会因
+`Table 'online_exam.da_question' doesn't exist` / `Unknown column 'dScore'` 报 500：
+
+```sql
+ALTER TABLE score ADD COLUMN dScore int(0) NULL DEFAULT 0 COMMENT '主观题成绩' AFTER etScore;
+
+CREATE TABLE IF NOT EXISTS da_question (
+  questionId int(0) NOT NULL AUTO_INCREMENT COMMENT '试题编号',
+  subject    varchar(20)  NULL COMMENT '作业科目',
+  question   varchar(255) NULL COMMENT '问题题目',
+  answer     varchar(255) NULL COMMENT '参考答案',
+  analysis   varchar(255) NULL COMMENT '题目解析',
+  score      int(0) NULL DEFAULT 5 COMMENT '分数',
+  section    varchar(20)  NULL COMMENT '所属章节',
+  level      varchar(1)   NULL COMMENT '难度等级',
+  PRIMARY KEY (questionId)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='大题题库表';
+
+CREATE TABLE IF NOT EXISTS da (
+  id         int(0) NOT NULL AUTO_INCREMENT,
+  studentId  int(0) NULL COMMENT '学号',
+  questionId int(0) NULL COMMENT '试题编号',
+  answerMe   text NULL COMMENT '学生作答内容',
+  scoreMe    varchar(20) NULL COMMENT '教师评分',
+  isTag      int(0) NULL DEFAULT 0 COMMENT '0待互评/1已评分/3教师重评',
+  examCode   int(0) NULL COMMENT '作业编号',
+  PRIMARY KEY (id),
+  UNIQUE KEY uk_da_student_question (studentId, questionId),
+  KEY idx_da_exam (examCode)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='大题作答表';
+```
+
+### 6. 单元测试
+
+```bash
+cd "OnlineExamSystemApi - idea"
+mvn test
+```
+
+## 运行参数
+
+| 配置项 | 默认值 | 说明 |
+| --- | --- | --- |
+| `server.port` | 9201 | 后端端口，需与前端 `config/index.js` 的代理目标一致 |
+| `app.kill-port-on-startup` | `false` | 启动时是否结束占用上述端口的进程（仅开发用；开启后只处理 LISTENING 状态且非自身的 PID） |
+
 ## 初始账号
 
 数据库脚本已内置演示数据，密码均为 `123456`：

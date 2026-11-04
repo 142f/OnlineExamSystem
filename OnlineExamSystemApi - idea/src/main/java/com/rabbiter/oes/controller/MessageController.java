@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.rabbiter.oes.entity.ApiResult;
 import com.rabbiter.oes.entity.Message;
-import com.rabbiter.oes.serviceimpl.MessageServiceImpl;
+import com.rabbiter.oes.service.MessageService;
 import com.rabbiter.oes.util.ApiResultHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 public class MessageController {
 
     @Autowired
-    private MessageServiceImpl messageService;
+    private MessageService messageService;
 
     @GetMapping("/messages/{page}/{size}")
     public ApiResult<Message> findAll(@PathVariable("page") Integer page, @PathVariable("size") Integer size) {

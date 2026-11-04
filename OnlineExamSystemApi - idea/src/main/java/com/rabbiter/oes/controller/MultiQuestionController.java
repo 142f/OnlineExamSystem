@@ -2,7 +2,7 @@ package com.rabbiter.oes.controller;
 
 import com.rabbiter.oes.entity.ApiResult;
 import com.rabbiter.oes.entity.MultiQuestion;
-import com.rabbiter.oes.serviceimpl.MultiQuestionServiceImpl;
+import com.rabbiter.oes.service.MultiQuestionService;
 import com.rabbiter.oes.util.ApiResultHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MultiQuestionController {
 
     @Autowired
-    private MultiQuestionServiceImpl multiQuestionService;
+    private MultiQuestionService multiQuestionService;
 
     @GetMapping("/multiQuestionId")
     public ApiResult findOnlyQuestion() {

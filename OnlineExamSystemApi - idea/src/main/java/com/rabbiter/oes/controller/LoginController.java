@@ -1,9 +1,8 @@
 package com.rabbiter.oes.controller;
 
 import com.rabbiter.oes.entity.*;
-import com.rabbiter.oes.serviceimpl.LoginServiceImpl;
+import com.rabbiter.oes.service.LoginService;
 import com.rabbiter.oes.util.ApiResultHandler;
-import org.apache.tomcat.util.security.MD5Encoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 public class LoginController {
 
     @Autowired
-    private LoginServiceImpl loginService;
+    private LoginService loginService;
 
     @PostMapping("/login")
     public ApiResult login(@RequestBody Login login, HttpServletRequest request, HttpServletResponse response) {
@@ -64,10 +63,12 @@ public class LoginController {
 
     @PostMapping("/logout")
     public void logout(HttpServletRequest request, HttpServletResponse response) {
-        Cookie token = new Cookie("rb_token", null);
+        // 注意：Cookie 的 value 传 null 在部分容器实现下会抛 IllegalArgumentException，
+        // 这里用空串 + maxAge=0 表示删除。
+        Cookie token = new Cookie("rb_token", "");
         token.setPath("/");
         token.setMaxAge(0);
-        Cookie role = new Cookie("rb_role", null);
+        Cookie role = new Cookie("rb_role", "");
         role.setPath("/");
         role.setMaxAge(0);
         response.addCookie(token);

@@ -25,17 +25,6 @@ public interface StudentMapper {
                            @Param("major")String major, @Param("clazz") String clazz);
 
 
-    @Select("select * from student where " +
-            "studentName like concat('%',#{name},'%') " +
-            "and grade like concat('%',#{grade},'%') " +
-            "and tel like concat('%',#{tel},'%') " +
-            "and major like concat('%',#{major},'%') " +
-            "and institute like concat('%',#{institute},'%') " +
-            "and clazz like concat('%',#{clazz},'%')")
-    IPage<Student> findAll2(Page page, @Param("name") String name, @Param("grade") String grade,
-                           @Param("tel") String tel,  @Param("institute") String institute,
-                           @Param("major")String major, @Param("clazz") String clazz);
-
     @Select("select * from student where studentId = #{studentId}")
     Student findById(Integer studentId);
 

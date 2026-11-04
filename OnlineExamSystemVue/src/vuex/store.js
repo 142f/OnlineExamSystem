@@ -103,7 +103,6 @@ const getters = {
 
 }
 
-import '@/../config/initialize'
 const actions = {
 	getUserInfo(context, info) {
 		context.commit('changeUserInfo', info)

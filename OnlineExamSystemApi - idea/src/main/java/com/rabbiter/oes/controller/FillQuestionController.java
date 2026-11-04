@@ -2,7 +2,7 @@ package com.rabbiter.oes.controller;
 
 import com.rabbiter.oes.entity.ApiResult;
 import com.rabbiter.oes.entity.FillQuestion;
-import com.rabbiter.oes.serviceimpl.FillQuestionServiceImpl;
+import com.rabbiter.oes.service.FillQuestionService;
 import com.rabbiter.oes.util.ApiResultHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,12 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class FillQuestionController {
 
     @Autowired
-    private FillQuestionServiceImpl fillQuestionService;
+    private FillQuestionService fillQuestionService;
 
     @PostMapping("/fillQuestion")
     public ApiResult add(@RequestBody FillQuestion fillQuestion) {
         int res = fillQuestionService.add(fillQuestion);
-        System.out.println(fillQuestion + "-------::1");
         if (res != 0) {
             return ApiResultHandler.buildApiResult(200,"添加成功",res);
         }
@@ -29,7 +28,6 @@ public class FillQuestionController {
     @PostMapping("/fillQuestion2")
     public ApiResult add2(@RequestBody FillQuestion fillQuestion) {
         int res = fillQuestionService.add2(fillQuestion);
-        System.out.println(fillQuestion + "-------::add2");
         if (res != 0) {
             return ApiResultHandler.buildApiResult(200,"添加成功",res);
         }

@@ -1,7 +1,8 @@
 package com.rabbiter.oes.config;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.pool.ExceptionSorter;
-import org.mybatis.spring.annotation.MapperScan;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -51,11 +52,13 @@ public class DataSourceConfiguration {
 }
 
 class CustomExceptionSorter implements ExceptionSorter {
+
+  private static final Logger log = LoggerFactory.getLogger(CustomExceptionSorter.class);
+
   @Override
   public boolean isExceptionFatal(SQLException e) {
-    // 将所有异常视为致命异常，即抛出到上层
-    // 打印异常堆栈信息
-    e.printStackTrace();
+    // 将所有异常视为致命异常，即抛出到上层（由 GlobalExceptionHandler 统一处理）
+    log.error("数据库连接异常", e);
     return true;
   }
 

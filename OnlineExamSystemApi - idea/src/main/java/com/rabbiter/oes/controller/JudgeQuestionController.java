@@ -2,7 +2,7 @@ package com.rabbiter.oes.controller;
 
 import com.rabbiter.oes.entity.ApiResult;
 import com.rabbiter.oes.entity.JudgeQuestion;
-import com.rabbiter.oes.serviceimpl.JudgeQuestionServiceImpl;
+import com.rabbiter.oes.service.JudgeQuestionService;
 import com.rabbiter.oes.util.ApiResultHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class JudgeQuestionController {
 
     @Autowired
-    private JudgeQuestionServiceImpl judgeQuestionService;
+    private JudgeQuestionService judgeQuestionService;
 
     @PostMapping("/judgeQuestion")
     public ApiResult add(@RequestBody JudgeQuestion judgeQuestion) {

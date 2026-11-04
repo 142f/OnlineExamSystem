@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.rabbiter.oes.entity.ApiResult;
 import com.rabbiter.oes.entity.DaQuestion;
 import com.rabbiter.oes.entity.Student;
-import com.rabbiter.oes.serviceimpl.DaQuestionServiceImpl;
+import com.rabbiter.oes.service.DaQuestionService;
 import com.rabbiter.oes.util.ApiResultHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class DaController {
 
     @Autowired
-    private DaQuestionServiceImpl daQuestionService;
+    private DaQuestionService daQuestionService;
 
     @GetMapping("/daQuestionall2/{page}/{size}/{studentId}")
     public ApiResult findAll(@PathVariable Integer page, @PathVariable Integer size,
@@ -44,8 +44,6 @@ public class DaController {
         int res = daQuestionService.update(daQuestion);
         daQuestionService.updateScore(studentId,examCode);
 
-        System.out.println(daQuestion.getStudentId() + "---::1");
-        System.out.println(daQuestion.getExamCode() + "---::1");
 
         if (res != 0) {
             return ApiResultHandler.buildApiResult(200, "更新成功", res);
@@ -55,9 +53,7 @@ public class DaController {
     }
     @GetMapping("/daQuestionId2/{studentIdd}/{questionIdd}")
     public ApiResult findOnlyQuestionId(@PathVariable Integer studentIdd, @PathVariable Integer questionIdd) {
-        System.out.println(studentIdd + "-----1");
         // 直接输出questionId的值，它也会自动调用Integer的toString方法
-        System.out.println(questionIdd + "-----1");
         DaQuestion res = daQuestionService.findOnlyQuestionId(studentIdd, questionIdd);
         return ApiResultHandler.buildApiResult(200, "查询成功", res);
     }
@@ -86,9 +82,7 @@ public class DaController {
 
     @GetMapping("/daQuestionId3/{studentIdd}/{questionIdd}")
     public ApiResult findOnlyQuestionId3(@PathVariable Integer studentIdd, @PathVariable Integer questionIdd) {
-        System.out.println(studentIdd + "-----1");
         // 直接输出questionId的值，它也会自动调用Integer的toString方法
-        System.out.println(questionIdd + "-----1");
         DaQuestion res = daQuestionService.findOnlyQuestionId(studentIdd, questionIdd);
         return ApiResultHandler.buildApiResult(200, "查询成功", res);
     }

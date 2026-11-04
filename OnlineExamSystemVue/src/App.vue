@@ -15,8 +15,7 @@
 		created() {
 			var token = this.$cookies.get("rb_token");
 			var role = this.$cookies.get("rb_role");
-			// todo role=“”
-			if (token == null || token == "" || role == null || role == null) {
+			if (token == null || token == "" || role == null || role == "") {
 				this.$router.push({
 					path: '/'
 				}) //跳转到首页

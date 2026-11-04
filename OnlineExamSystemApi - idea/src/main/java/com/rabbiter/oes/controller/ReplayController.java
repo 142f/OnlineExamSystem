@@ -2,7 +2,7 @@ package com.rabbiter.oes.controller;
 
 import com.rabbiter.oes.entity.ApiResult;
 import com.rabbiter.oes.entity.Replay;
-import com.rabbiter.oes.serviceimpl.ReplayServiceImpl;
+import com.rabbiter.oes.service.ReplayService;
 import com.rabbiter.oes.util.ApiResultHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +13,7 @@ import java.util.List;
 public class ReplayController {
 
     @Autowired
-    private ReplayServiceImpl replayService;
+    private ReplayService replayService;
 
     @PostMapping("/replay")
     public ApiResult add(@RequestBody Replay replay) {

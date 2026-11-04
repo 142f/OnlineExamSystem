@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.rabbiter.oes.entity.ApiResult;
 import com.rabbiter.oes.entity.Score;
-import com.rabbiter.oes.serviceimpl.ScoreServiceImpl;
+import com.rabbiter.oes.service.ScoreService;
 import com.rabbiter.oes.util.ApiResultHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +14,7 @@ import java.util.List;
 @RestController
 public class ScoreController {
     @Autowired
-    private ScoreServiceImpl scoreService;
+    private ScoreService scoreService;
 
     @GetMapping("/scores")
     public ApiResult findAll() {
@@ -26,8 +26,6 @@ public class ScoreController {
     public ApiResult findById(@PathVariable("page") Integer page, @PathVariable("size") Integer size, @PathVariable("studentId") Integer studentId) {
         Page<Score> scorePage = new Page<>(page, size);
         IPage<Score> res = scoreService.findById(scorePage, studentId);
-        System.out.println(res);
-        System.out.println("----res测试");
         return ApiResultHandler.buildApiResult(200, "根据ID查询成绩", res);
     }
 
@@ -54,7 +52,6 @@ public class ScoreController {
     @GetMapping("/scores/{examCode}")
     public ApiResult findByExamCode(@PathVariable("examCode") Integer examCode) {
         List<Score> scores = scoreService.findByExamCode(examCode);
-        System.out.println( "--------作业学生成绩");
         return ApiResultHandler.buildApiResult(200,"课程成绩查询成功",scores);
     }
 }

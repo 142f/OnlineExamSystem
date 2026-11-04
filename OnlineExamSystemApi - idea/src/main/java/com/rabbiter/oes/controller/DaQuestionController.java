@@ -7,9 +7,9 @@ import com.rabbiter.oes.entity.DaQuestion;
 import com.rabbiter.oes.entity.ExamManage;
 import com.rabbiter.oes.entity.Student;
 import com.rabbiter.oes.mapper.ExamManageMapper;
-import com.rabbiter.oes.serviceimpl.DaQuestionServiceImpl;
-import com.rabbiter.oes.serviceimpl.ExamManageServiceImpl;
-import com.rabbiter.oes.serviceimpl.PaperServiceImpl;
+import com.rabbiter.oes.service.DaQuestionService;
+import com.rabbiter.oes.service.ExamManageService;
+import com.rabbiter.oes.service.PaperService;
 import com.rabbiter.oes.util.ApiResultHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,11 +19,11 @@ import org.springframework.web.bind.annotation.*;
 public class DaQuestionController {
 
     @Autowired
-    private DaQuestionServiceImpl daQuestionService;
+    private DaQuestionService daQuestionService;
     @Autowired
-    private ExamManageServiceImpl examManageService;
+    private ExamManageService examManageService;
     @Autowired
-    private PaperServiceImpl paperService;
+    private PaperService paperService;
 
 //互评需要的作业内容
     @GetMapping("/daQuestionall/{page}/{size}/{studentId}")
@@ -72,8 +72,6 @@ public class DaQuestionController {
         Integer studentId = daQuestion.getStudentId();
         Integer examCode = daQuestion.getExamCode();
 
-        System.out.println(daQuestion.getStudentId() + "---::1");
-        System.out.println(daQuestion.getExamCode() + "---::1");
 
         int res = daQuestionService.update(daQuestion);
         daQuestionService.updateScore(studentId,examCode);
@@ -90,8 +88,6 @@ public class DaQuestionController {
                              @PathVariable Integer studentId) {
         Page<DaQuestion> DaPage = new Page<>(page, size);
         IPage<DaQuestion> res = daQuestionService.findAllTea(DaPage, studentId);
-        System.out.println(res+"----123");
-        System.out.println("--------findAllTea测试");
         return ApiResultHandler.buildApiResult(200, "分页查询所有学生da", res);
     }
 
@@ -100,8 +96,6 @@ public class DaQuestionController {
     public ApiResult update3(@RequestBody DaQuestion daQuestion) {
         Integer studentId = daQuestion.getStudentId();
         Integer examCode = daQuestion.getExamCode();
-        System.out.println(daQuestion.getStudentId() + "---::1");
-        System.out.println(daQuestion.getExamCode() + "---::1");
         int res = daQuestionService.update3(daQuestion);
         //更新成绩表的主观题分数
         daQuestionService.updateScore(studentId,examCode);
@@ -119,10 +113,7 @@ public class DaQuestionController {
 * */
     @GetMapping("/daQuestionId/{studentIdd}/{questionIdd}")
     public ApiResult findOnlyQuestionId(@PathVariable Integer studentIdd, @PathVariable Integer questionIdd) {
-        System.out.println("-----评分成功");
-        System.out.println(studentIdd + "-----1");
         // 直接输出questionId的值，它也会自动调用Integer的toString方法
-        System.out.println(questionIdd + "-----1");
         DaQuestion res = daQuestionService.findOnlyQuestionId(studentIdd, questionIdd);
         return ApiResultHandler.buildApiResult(200, "查询成功", res);
     }
