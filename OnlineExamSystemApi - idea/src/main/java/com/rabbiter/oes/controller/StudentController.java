@@ -10,7 +10,7 @@ import com.rabbiter.oes.util.ApiResultHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 
 @RestController
 public class StudentController {

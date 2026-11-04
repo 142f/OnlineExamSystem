@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.NoHandlerFoundException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 /**
  * 全局异常处理。
@@ -36,6 +38,18 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleException(Exception e) {
         log.error("请求处理失败: {}", e.getMessage(), e);
         return new ResponseEntity<>(buildFriendlyMessage(e), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    /**
+     * 404：Spring Boot 3 起，未匹配到任何 Controller 的请求会由静态资源处理器抛出
+     * NoResourceFoundException；若仍落到上面的 Exception 兜底，会被改写成 500，
+     * 与升级前（Boot 2.1 直接返回 404）的行为不一致，故单独处理。
+     */
+    @ExceptionHandler({NoResourceFoundException.class, NoHandlerFoundException.class})
+    @ResponseBody
+    public ResponseEntity<String> handleNotFound(Exception e) {
+        log.debug("资源不存在: {}", e.getMessage());
+        return new ResponseEntity<>("请求的资源不存在", HttpStatus.NOT_FOUND);
     }
 
     /**

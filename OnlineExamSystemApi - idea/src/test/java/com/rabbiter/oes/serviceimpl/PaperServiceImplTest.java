@@ -2,13 +2,16 @@ package com.rabbiter.oes.serviceimpl;
 
 import com.rabbiter.oes.mapper.PaperMapper;
 import com.rabbiter.oes.vo.Item;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -20,9 +23,12 @@ import static org.mockito.Mockito.when;
  * PaperServiceImpl 单元测试（不依赖数据库）：
  * 覆盖总分计算的空值边界、组卷参数校验、删题的编号校验与“未绑定作业”分支。
  *
- * 说明：Spring Boot 2.1 的 starter-test 默认携带 JUnit 4，故使用 JUnit 4 + Mockito。
+ * 说明：Spring Boot 4 的 starter-test 默认携带 JUnit Jupiter 6，
+ * 故使用 JUnit 5 扩展模型（@ExtendWith）+ Mockito；strictness 设为 LENIENT 以保持
+ * 原 MockitoJUnitRunner.Silent 的宽松语义（允许存在未被使用的 stub）。
  */
-@RunWith(MockitoJUnitRunner.Silent.class)
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class PaperServiceImplTest {
 
     @Mock
@@ -59,7 +65,7 @@ public class PaperServiceImplTest {
 
         try {
             paperService.composePaper(item);
-            org.junit.Assert.fail("应当抛出 IllegalArgumentException");
+            fail("应当抛出 IllegalArgumentException");
         } catch (IllegalArgumentException e) {
             assertEquals("组卷参数不完整：试卷编号或各题型数量为空，组卷失败", e.getMessage());
         }
@@ -77,7 +83,7 @@ public class PaperServiceImplTest {
 
         try {
             paperService.composePaper(item);
-            org.junit.Assert.fail("应当抛出 IllegalArgumentException");
+            fail("应当抛出 IllegalArgumentException");
         } catch (IllegalArgumentException expected) {
             // ok
         }
@@ -88,7 +94,7 @@ public class PaperServiceImplTest {
     public void removeQuestionRejectsInvalidPaperId() {
         try {
             paperService.removeQuestion("abc", "1", "10000");
-            org.junit.Assert.fail("应当抛出 IllegalArgumentException");
+            fail("应当抛出 IllegalArgumentException");
         } catch (IllegalArgumentException e) {
             assertEquals("试卷编号格式错误", e.getMessage());
         }

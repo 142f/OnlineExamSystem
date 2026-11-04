@@ -1,5 +1,5 @@
 # ---------- 构建阶段 ----------
-FROM maven:3.8.6-openjdk-8 AS build
+FROM maven:3.9-eclipse-temurin-21 AS build
 WORKDIR /build
 
 # 先拷 pom，利用 Docker 层缓存减少重复下载依赖
@@ -10,7 +10,7 @@ COPY src ./src
 RUN mvn -B -ntp -DskipTests package
 
 # ---------- 运行阶段 ----------
-FROM eclipse-temurin:8-jre
+FROM eclipse-temurin:21-jre
 WORKDIR /app
 
 # 时区与语言，避免中文乱码与 UTC 时间偏差
