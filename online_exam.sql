@@ -829,3 +829,9 @@ UPDATE `multi_question` SET `level` = CASE WHEN `level` IN ('1','2','3') THEN `l
 UPDATE `fill_question`  SET `level` = CASE WHEN `level` IN ('1','2','3') THEN `level` ELSE '1' END;
 UPDATE `judge_question` SET `level` = CASE WHEN `level` IN ('1','2','3') THEN `level` ELSE '1' END;
 UPDATE `da_question`    SET `level` = CASE WHEN `level` IN ('1','2','3') THEN `level` ELSE '3' END;
+
+-- 判断题答案统一为前端约定：T(正确) / F(错误)
+UPDATE `judge_question` SET `answer` = CASE
+  WHEN `answer` IN ('√','对','T') THEN 'T'
+  WHEN `answer` IN ('×','错','F') THEN 'F'
+  ELSE `answer` END;
