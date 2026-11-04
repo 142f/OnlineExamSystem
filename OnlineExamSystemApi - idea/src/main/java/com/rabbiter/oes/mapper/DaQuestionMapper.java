@@ -148,7 +148,8 @@ public interface DaQuestionMapper {
             "        da.examCode = #{examCode}",
             "        AND da.studentId = #{studentId}",
             ")",
-            "WHERE score.examCode = #{examCode}"
+            "WHERE score.examCode = #{examCode}",
+            "  AND score.studentId = #{studentId}"
     })
     void updateScore(@Param("studentId") Integer studentId, @Param("examCode") Integer examCode);
 

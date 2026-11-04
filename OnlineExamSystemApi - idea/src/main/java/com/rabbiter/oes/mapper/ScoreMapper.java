@@ -59,7 +59,11 @@ public interface ScoreMapper {
     @Select("select* from score where examCode = #{examCode} ")
     List<Score> findByExamCode(Integer examCode);
 ////////
-    @Select("update score set score = #{totalScore}  where examCode = #{examCode} ")
-    Integer updateMaxScore(ExamManage exammanage) ;
+    /**
+     * 组卷/删除题目后同步该作业所有成绩记录的“试卷满分”。
+     * 注意：这是 UPDATE 语句，必须使用 @Update，否则 MyBatis 会当作查询执行。
+     */
+    @Update("update score set score = #{totalScore} where examCode = #{examCode}")
+    Integer updateMaxScore(ExamManage exammanage);
 
 }

@@ -119,7 +119,7 @@ public class Item {
                 ", daQuestionNumber=" + daQuestionNumber +
                 ", judgeNumber=" + judgeNumber +
                 ", totalQuestionCount=" + getTotalQuestionCount() +
-                '}'
+                '}';
     }
 
     @Override
@@ -137,6 +137,6 @@ public class Item {
 
     @Override
     public int hashCode() {
-        return Objects.hash(subject, paperId, changeNumber, fillNumber, daQuestionNumber, judgeNumber);;
+        return Objects.hash(subject, paperId, changeNumber, fillNumber, daQuestionNumber, judgeNumber);
     }
 }

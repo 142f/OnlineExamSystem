@@ -134,6 +134,4 @@ public class AnswerVO {
     public int hashCode() {
         return Objects.hash(questionId, question, subject, score, section, level, type);
     }
-}';
-    }
 }

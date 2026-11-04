@@ -40,6 +40,43 @@ CREATE TABLE `admin`  (
 INSERT INTO `admin` VALUES (9991, '超级管理员', '男', '13652222222', '1253578873@qq.com', '123456', '551444444444447887', '0');
 
 -- ----------------------------
+-- Table structure for da
+-- 说明：大题作答与互评表。*该表在原导出脚本中缺失*，此处依据
+--      DaQuestionMapper（insert/update/updateScore）与 DaQuestion 实体补全。
+-- ----------------------------
+DROP TABLE IF EXISTS `da`;
+CREATE TABLE `da`  (
+  `id` int(0) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `studentId` int(0) NULL DEFAULT NULL COMMENT '学号',
+  `questionId` int(0) NULL DEFAULT NULL COMMENT '试题编号',
+  `answerMe` text CHARACTER SET utf8 COLLATE utf8_bin NULL COMMENT '学生作答内容',
+  `scoreMe` varchar(20) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '教师评分',
+  `isTag` int(0) NULL DEFAULT 0 COMMENT '状态(0待互评,1已评分,3教师重评)',
+  `examCode` int(0) NULL DEFAULT NULL COMMENT '作业编号',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `uk_da_student_question`(`studentId`, `questionId`) USING BTREE,
+  INDEX `idx_da_exam`(`examCode`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '大题作答表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for da_question
+-- 说明：大题题库表。*该表在原导出脚本中缺失*，此处依据
+--      DaQuestionMapper 的字段与 big-question 相关 SQL 补全。
+-- ----------------------------
+DROP TABLE IF EXISTS `da_question`;
+CREATE TABLE `da_question`  (
+  `questionId` int(0) NOT NULL AUTO_INCREMENT COMMENT '试题编号',
+  `subject` varchar(20) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '作业科目',
+  `question` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '问题题目',
+  `answer` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '参考答案',
+  `analysis` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '题目解析',
+  `score` int(0) NULL DEFAULT 5 COMMENT '分数',
+  `section` varchar(20) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '所属章节',
+  `level` varchar(1) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '难度等级',
+  PRIMARY KEY (`questionId`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '大题题库表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for exam_manage
 -- ----------------------------
 DROP TABLE IF EXISTS `exam_manage`;
@@ -436,6 +473,7 @@ CREATE TABLE `score`  (
   `subject` varchar(20) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '课程名称',
   `ptScore` int(0) NULL DEFAULT NULL COMMENT '是否及格，0不及格，1及格',
   `etScore` int(0) NULL DEFAULT NULL COMMENT '成绩',
+  `dScore` int(0) NULL DEFAULT 0 COMMENT '主观题成绩',
   `score` int(0) NULL DEFAULT NULL COMMENT '试卷满分',
   `answerDate` varchar(10) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '答题日期',
   PRIMARY KEY (`scoreId`) USING BTREE
