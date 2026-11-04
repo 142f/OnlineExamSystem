@@ -813,3 +813,15 @@ UPDATE `score` s SET s.dScore = (
       JOIN exam_manage em ON em.paperId = pm.paperId
       WHERE em.examCode = s.examCode AND pm.questionType = 4)
 );
+
+-- ============================================================
+-- 补充「待互评」的大题作答（isTag = 0），用于作业互评页面演示
+-- ============================================================
+INSERT INTO `da` (studentId, questionId, answerMe, isTag) VALUES (20224084, 20004, '3NF 需要消除非主属性对码的传递依赖，比如把学院信息单独建表。', 0) ON DUPLICATE KEY UPDATE answerMe = VALUES(answerMe), isTag = 0;
+INSERT INTO `da` (studentId, questionId, answerMe, isTag) VALUES (20224084, 20005, '进程有独立地址空间，线程共享，因此线程切换更轻量。', 0) ON DUPLICATE KEY UPDATE answerMe = VALUES(answerMe), isTag = 0;
+INSERT INTO `da` (studentId, questionId, answerMe, isTag) VALUES (20225003, 20005, '死锁的四个条件：互斥、请求与保持、不可剥夺、循环等待。', 0) ON DUPLICATE KEY UPDATE answerMe = VALUES(answerMe), isTag = 0;
+INSERT INTO `da` (studentId, questionId, answerMe, isTag) VALUES (20225003, 20006, '敏捷强调小步迭代和持续反馈，瀑布强调阶段顺序。', 0) ON DUPLICATE KEY UPDATE answerMe = VALUES(answerMe), isTag = 0;
+INSERT INTO `da` (studentId, questionId, answerMe, isTag) VALUES (20225007, 20006, '单元测试验证单个函数，集成测试验证模块之间的接口。', 0) ON DUPLICATE KEY UPDATE answerMe = VALUES(answerMe), isTag = 0;
+INSERT INTO `da` (studentId, questionId, answerMe, isTag) VALUES (20225007, 20007, '栈适合表达式求值，队列适合任务排队。', 0) ON DUPLICATE KEY UPDATE answerMe = VALUES(answerMe), isTag = 0;
+INSERT INTO `da` (studentId, questionId, answerMe, isTag) VALUES (20225008, 20007, '快排最坏是 O(n^2)，取中间值做基准可以缓解。', 0) ON DUPLICATE KEY UPDATE answerMe = VALUES(answerMe), isTag = 0;
+INSERT INTO `da` (studentId, questionId, answerMe, isTag) VALUES (20225008, 20008, 'ACID 中的隔离性用于避免脏读和不可重复读。', 0) ON DUPLICATE KEY UPDATE answerMe = VALUES(answerMe), isTag = 0;
