@@ -820,3 +820,12 @@ INSERT INTO `da` (studentId, questionId, answerMe, isTag) VALUES (20225007, 2000
 INSERT INTO `da` (studentId, questionId, answerMe, isTag) VALUES (20225007, 20007, '栈适合表达式求值，队列适合任务排队。', 0) ON DUPLICATE KEY UPDATE answerMe = VALUES(answerMe), isTag = 0;
 INSERT INTO `da` (studentId, questionId, answerMe, isTag) VALUES (20225008, 20007, '快排最坏是 O(n^2)，取中间值做基准可以缓解。', 0) ON DUPLICATE KEY UPDATE answerMe = VALUES(answerMe), isTag = 0;
 INSERT INTO `da` (studentId, questionId, answerMe, isTag) VALUES (20225008, 20008, 'ACID 中的隔离性用于避免脏读和不可重复读。', 0) ON DUPLICATE KEY UPDATE answerMe = VALUES(answerMe), isTag = 0;
+
+-- ============================================================
+-- 题库数据规范化：难度等级统一为 1(易) / 2(中) / 3(难)
+-- 原数据存在 4、5 等越界值，统一按最接近档位收敛
+-- ============================================================
+UPDATE `multi_question` SET `level` = CASE WHEN `level` IN ('1','2','3') THEN `level` ELSE '1' END;
+UPDATE `fill_question`  SET `level` = CASE WHEN `level` IN ('1','2','3') THEN `level` ELSE '1' END;
+UPDATE `judge_question` SET `level` = CASE WHEN `level` IN ('1','2','3') THEN `level` ELSE '1' END;
+UPDATE `da_question`    SET `level` = CASE WHEN `level` IN ('1','2','3') THEN `level` ELSE '3' END;
