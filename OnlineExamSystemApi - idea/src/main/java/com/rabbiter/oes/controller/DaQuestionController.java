@@ -129,6 +129,16 @@ public class DaQuestionController {
     }
 
 
+    /**
+     * 新增大题后前端会调用该接口获取最新 questionId，再写入 paper_manage。
+     * 该接口此前缺失，导致前端 404、大题无法自动关联到试卷。
+     */
+    @GetMapping("/fillQuestionId2")
+    public ApiResult findLastQuestionId() {
+        DaQuestion res = daQuestionService.findLastQuestionId();
+        return ApiResultHandler.buildApiResult(200, "查询成功", res);
+    }
+
     @PostMapping("/editDaQuestion")
     public ApiResult edit(@RequestBody DaQuestion daQuestion) {
         int res = daQuestionService.edit(daQuestion);

@@ -139,14 +139,24 @@ public interface DaQuestionMapper {
 //    void updateScore(@Param("studentId") Integer studentId, @Param("examCode") Integer examCode);
 
     // TODO: 2024/4/17 数据出错
+    /**
+     * 汇总某学生某次作业的主观题得分。
+     *
+     * 原实现依赖 da.examCode，但 da 表的该列从未被写入（insert 语句不含 examCode），
+     * 导致子查询恒为 NULL、dScore 永远算不出来。这里改为通过
+     * paper_manage(questionType=4) -> exam_manage.paperId 反查该作业包含的大题。
+     */
     @Update({
             "UPDATE score",
             "SET dScore = (",
-            "    SELECT SUM(da.ScoreMe)",
-            "    FROM da",
-            "    WHERE",
-            "        da.examCode = #{examCode}",
-            "        AND da.studentId = #{studentId}",
+            "    SELECT COALESCE(SUM(CAST(NULLIF(TRIM(d.scoreMe), '') AS SIGNED)), 0)",
+            "    FROM da d",
+            "    WHERE d.studentId = #{studentId}",
+            "      AND d.questionId IN (",
+            "          SELECT pm.questionId FROM paper_manage pm",
+            "          JOIN exam_manage em ON em.paperId = pm.paperId",
+            "          WHERE em.examCode = #{examCode} AND pm.questionType = 4",
+            "      )",
             ")",
             "WHERE score.examCode = #{examCode}",
             "  AND score.studentId = #{studentId}"
@@ -179,6 +189,12 @@ public interface DaQuestionMapper {
 
     @Select("select questionId from da_question where subject = #{subject} order by rand() desc limit #{pageNo}")
     List<Integer> findBySubject(@Param("subject") String subject, @Param("pageNo") Integer pageNo);
+
+    /**
+     * 查询大题题库中最后一条记录的 questionId（前端新增大题后需要用它建立试卷关联）。
+     */
+    @Select("select questionId from da_question order by questionId desc limit 1")
+    DaQuestion findLastQuestionId();
 
     @Update("update da_question set section = #{section}, question = #{question}, answer = #{answer}, level = #{level}, analysis = #{analysis} where questionId = #{questionId}")
     int edit(DaQuestion daQuestion);

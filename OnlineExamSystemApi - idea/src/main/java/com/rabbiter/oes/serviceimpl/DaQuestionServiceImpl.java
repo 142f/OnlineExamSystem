@@ -88,4 +88,9 @@ public class DaQuestionServiceImpl implements DaQuestionService {
         return daQuestionMapper.edit(daQuestion);
     }
 
+    @Override
+    public DaQuestion findLastQuestionId() {
+        return daQuestionMapper.findLastQuestionId();
+    }
+
 }

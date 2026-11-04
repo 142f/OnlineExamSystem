@@ -58,8 +58,9 @@ public class ApiResult<T> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ApiResult<?> apiResult = (ApiResult<?>) o;
-        return code == apiResult.code && message.equals(apiResult.message)
-                && data.equals(apiResult.data);
+        return code == apiResult.code
+                && Objects.equals(message, apiResult.message)
+                && Objects.equals(data, apiResult.data);
     }
 
     @Override

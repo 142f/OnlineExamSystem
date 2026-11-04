@@ -33,5 +33,10 @@ public interface DaQuestionService {
 
     List<Integer> findBySubject(String subject, Integer pageNo);
 
+    /**
+     * 大题题库最后一条记录的 questionId。
+     */
+    DaQuestion findLastQuestionId();
+
     int edit(DaQuestion daQuestion);
 }
