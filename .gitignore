@@ -69,10 +69,12 @@ ehthumbs.db
 desktop.ini
 
 # ---------- 本地配置与敏感信息 ----------
-# 数据库账号密码等本地配置不提交，仅提交 application.properties.example 模板
+# 数据库账号密码等本地配置不提交，仅提交 .example 模板与容器专用配置
 application.properties
 application-*.properties
 !application.properties.example
+# 容器运行配置不含任何真实口令（全部走环境变量），需要入库
+!application-docker.properties
 .env
 .env.*
 !.env.example

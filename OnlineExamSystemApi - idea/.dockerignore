@@ -1,0 +1,7 @@
+target/
+*.iml
+.idea/
+.git/
+*.log
+# 本地私有配置（含数据库密码），镜像内改用 application-docker.properties + 环境变量
+src/main/resources/application.properties

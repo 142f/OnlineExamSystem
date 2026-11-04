@@ -1,0 +1,55 @@
+# 一键启动：docker compose up -d --build
+# 访问前端 http://localhost:9202 ，后端 API http://localhost:9201
+services:
+  db:
+    image: mysql:8.0
+    container_name: oes-db
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_bin
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-123456}
+      MYSQL_DATABASE: online_exam
+      TZ: Asia/Shanghai
+    volumes:
+      # 首次启动自动导入建表与种子数据（数据卷已存在时不会重复执行）
+      - ./online_exam.sql:/docker-entrypoint-initdb.d/01-online_exam.sql:ro
+      - db_data:/var/lib/mysql
+    ports:
+      - "3307:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-p${DB_PASSWORD:-123456}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: "./OnlineExamSystemApi - idea"
+    container_name: oes-api
+    environment:
+      DB_URL: "jdbc:mysql://db:3306/online_exam?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true"
+      DB_USER: root
+      DB_PASSWORD: ${DB_PASSWORD:-123456}
+      CORS_ORIGINS: "http://localhost:9202,http://127.0.0.1:9202,http://localhost"
+      TZ: Asia/Shanghai
+      JAVA_OPTS: "-Xms256m -Xmx512m"
+    ports:
+      - "9201:9201"
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./OnlineExamSystemVue
+    container_name: oes-web
+    ports:
+      - "9202:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  db_data:

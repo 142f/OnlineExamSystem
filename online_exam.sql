@@ -74,6 +74,8 @@ CREATE TABLE `da_question`  (
   `section` varchar(20) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '所属章节',
   `level` varchar(1) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '难度等级',
   PRIMARY KEY (`questionId`) USING BTREE
+,
+  INDEX `idx_da_question_subject`(`subject`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '大题题库表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -95,6 +97,8 @@ CREATE TABLE `exam_manage`  (
   `type` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '作业类型',
   `tips` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '考生须知',
   PRIMARY KEY (`examCode`) USING BTREE
+,
+  INDEX `idx_exam_paper`(`paperId`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 20190023 CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '作业管理表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -133,6 +137,8 @@ CREATE TABLE `fill_question`  (
   `level` varchar(5) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '难度等级',
   `section` varchar(20) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '所属章节',
   PRIMARY KEY (`questionId`) USING BTREE
+,
+  INDEX `idx_fill_subject`(`subject`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 10029 CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '填空题题库' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -183,6 +189,8 @@ CREATE TABLE `judge_question`  (
   `level` varchar(1) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '难度等级',
   `section` varchar(20) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '所属章节',
   PRIMARY KEY (`questionId`) USING BTREE
+,
+  INDEX `idx_judge_subject`(`subject`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 10012 CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '判断题题库表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -237,6 +245,8 @@ CREATE TABLE `multi_question`  (
   `section` varchar(20) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '所属章节',
   `level` varchar(1) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '难度等级',
   PRIMARY KEY (`questionId`) USING BTREE
+,
+  INDEX `idx_multi_subject`(`subject`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 10034 CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '选择题题库表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -285,6 +295,10 @@ CREATE TABLE `paper_manage`  (
   `paperId` int(0) NULL DEFAULT NULL COMMENT '试卷编号',
   `questionType` int(0) NULL DEFAULT NULL COMMENT '题目类型',
   `questionId` int(0) NULL DEFAULT NULL COMMENT '题目编号'
+,
+  INDEX `idx_paper_paper`(`paperId`) USING BTREE,
+  INDEX `idx_paper_paper_type`(`paperId`, `questionType`) USING BTREE,
+  INDEX `idx_paper_question`(`questionId`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '试卷管理表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -454,6 +468,8 @@ CREATE TABLE `replay`  (
   `replay` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '内容',
   `replayTime` date NULL DEFAULT NULL COMMENT '回复时间',
   PRIMARY KEY (`replayId`) USING BTREE
+,
+  INDEX `idx_replay_message`(`messageId`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 23 CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '回复表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -477,6 +493,9 @@ CREATE TABLE `score`  (
   `score` int(0) NULL DEFAULT NULL COMMENT '试卷满分',
   `answerDate` varchar(10) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '答题日期',
   PRIMARY KEY (`scoreId`) USING BTREE
+,
+  INDEX `idx_score_exam`(`examCode`) USING BTREE,
+  INDEX `idx_score_student`(`studentId`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 149 CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '成绩管理表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------

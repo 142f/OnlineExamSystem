@@ -216,6 +216,60 @@ mvn test
 - `target/`、`dist/`、`node_modules/`、IDE 配置（`.idea/`）等生成物同样不会提交。
 - 如需修改配置项，请在本地复制模板后再编辑，切勿将真实密码提交到仓库。
 
+## 容器化部署（Docker）
+
+仓库自带后端 / 前端 Dockerfile 与 `docker-compose.yml`，可一键拉起「MySQL + 后端 + 前端」：
+
+```bash
+# 首次启动会自动建库并导入 online_exam.sql 种子数据
+docker compose up -d --build
+
+# 查看状态 / 日志
+docker compose ps
+docker compose logs -f backend
+```
+
+| 服务 | 容器 | 端口 | 说明 |
+| --- | --- | --- | --- |
+| db | oes-db | 3307→3306 | MySQL 8，数据卷 `db_data` 持久化 |
+| backend | oes-api | 9201→9201 | Spring Boot fat jar，`--spring.profiles.active=docker` |
+| frontend | oes-web | 9202→80 | Nginx 托管 `dist`，`/api` 反向代理到 `backend:9201` |
+
+可配置项（`.env` 或环境变量）：
+
+```bash
+DB_PASSWORD=your-password     # 数据库 root 密码，默认 123456
+CORS_ORIGINS=http://localhost:9202
+JAVA_OPTS=-Xms256m -Xmx512m
+```
+
+说明：
+
+- 后端镜像基于 `maven:3.8.6-openjdk-8` 构建、`eclipse-temurin:8-jre` 运行，构建产物为可 `java -jar` 的 fat jar。
+- 本地私有配置 `src/main/resources/application.properties` 已加入 `.dockerignore`，**不会打进镜像**；容器内使用
+  `application-docker.properties` + `DB_URL`/`DB_USER`/`DB_PASSWORD` 环境变量。
+- 前端镜像基于 `node:16-alpine` 构建（项目为 webpack 3，需 Node 16）、`nginx:1.25-alpine` 运行。
+
+## 索引与查询优化
+
+`online_exam.sql` 的建表语句已内置以下索引（历史库请执行对应 `ALTER TABLE ... ADD INDEX`）：
+
+| 表 | 索引 | 对应查询 |
+| --- | --- | --- |
+| paper_manage | idx_paper_paper(paperId)、idx_paper_paper_type(paperId, questionType)、idx_paper_question(questionId) | 组卷、试卷详情、总分聚合 |
+| exam_manage | idx_exam_paper(paperId) | 由 paperId 反查 examCode |
+| score | idx_score_exam(examCode)、idx_score_student(studentId) | 学生成绩列表、作业成绩统计 |
+| multi_question / fill_question / judge_question / da_question | idx_*_subject(subject) | 组卷随机抽题 |
+| replay | idx_replay_message(messageId) | 留言回复列表 |
+
+实测（20 万行基准表，200 次取均值）：
+
+| 查询 | 加索引前 | 加索引后 |
+| --- | --- | --- |
+| `where studentId = ?` | 22.8 ms（ALL 全表扫描） | 0.029 ms（ref） |
+| `where examCode = ?` | 22.9 ms（ALL） | 0.061 ms（ref） |
+| `paper_manage where paperId = ?` | 55.4 ms（ALL） | 0.049 ms（ref） |
+
 ## 许可证
 
 本项目仅用于学习与课程设计交流。
