@@ -835,3 +835,12 @@ UPDATE `judge_question` SET `answer` = CASE
   WHEN `answer` IN ('√','对','T') THEN 'T'
   WHEN `answer` IN ('×','错','F') THEN 'F'
   ELSE `answer` END;
+
+-- 填空题多空答案统一用 '|' 分隔，去掉括号注释，便于判分
+UPDATE `fill_question` SET `answer` = '通信子网|资源子网' WHERE `questionId` = 10000;
+UPDATE `fill_question` SET `answer` = 'TCP|UDP' WHERE `questionId` = 10002;
+UPDATE `fill_question` SET `answer` = '同轴电缆|双绞线|光纤' WHERE `questionId` = 10003;
+UPDATE `fill_question` SET `answer` = 'CERnet' WHERE `questionId` = 10004;
+UPDATE `fill_question` SET `answer` = '广域网|局域网|城域网' WHERE `questionId` = 10005;
+UPDATE `fill_question` SET `answer` = 'POP3|SMTP' WHERE `questionId` = 10006;
+UPDATE `fill_question` SET `answer` = '分组交换|电路交换' WHERE `questionId` = 10009;
