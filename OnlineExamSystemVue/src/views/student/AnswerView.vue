@@ -161,10 +161,10 @@
 							{{ title }}
 						</p>
 						<i class="iconfont icon-right auto-right"></i>
-						<span>全卷共{{
+						<span>全卷共 {{
                             topicCount[0] + topicCount[1] + topicCount[2] + topicCount[3]
 							
-                        }}题{{ userInfo.id }}
+                        }}题 · {{ userInfo.id }}
 							<span v-if="!isPractice">
 								<i class="iconfont icon-time"></i>倒计时：<b>{{
                                     time
