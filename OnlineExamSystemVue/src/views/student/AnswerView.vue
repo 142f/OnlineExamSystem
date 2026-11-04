@@ -1086,7 +1086,7 @@
 		background-color: #fff;
 		margin: 10px;
 		margin-left: 0px;
-		height: 470px;
+		min-height: 420px;
 	}
 
 	.content .el-radio-group label {
@@ -1357,6 +1357,9 @@
 	}
 
 	#answer .operation {
+		position: sticky;
+		bottom: 0;
+		z-index: 5;
 		background: #fff;
 		border-top: 1px solid var(--oes-border);
 		padding: 12px 24px;
