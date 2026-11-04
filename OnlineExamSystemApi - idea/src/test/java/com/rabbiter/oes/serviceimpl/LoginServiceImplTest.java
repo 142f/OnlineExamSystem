@@ -2,20 +2,22 @@ package com.rabbiter.oes.serviceimpl;
 
 import com.rabbiter.oes.entity.Admin;
 import com.rabbiter.oes.mapper.LoginMapper;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -26,7 +28,8 @@ import static org.mockito.Mockito.when;
 /**
  * 登录服务单元测试：验证 BCrypt 校验、历史明文兼容与自动升级。
  */
-@RunWith(MockitoJUnitRunner.Silent.class)
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class LoginServiceImplTest {
 
     @Mock
@@ -37,7 +40,7 @@ public class LoginServiceImplTest {
 
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-    @Before
+    @BeforeEach
     public void injectEncoder() {
         ReflectionTestUtils.setField(loginService, "passwordEncoder", encoder);
     }
@@ -76,7 +79,7 @@ public class LoginServiceImplTest {
         ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
         verify(loginMapper).updateAdminPwd(eq(9991), captor.capture());
         String stored = captor.getValue();
-        assertTrue("升级后的密码应为 BCrypt 密文", stored.startsWith("$2"));
+        assertTrue(stored.startsWith("$2"), "升级后的密码应为 BCrypt 密文");
         assertTrue(encoder.matches("123456", stored));
     }
 
