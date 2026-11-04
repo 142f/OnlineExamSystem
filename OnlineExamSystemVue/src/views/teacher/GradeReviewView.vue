@@ -27,7 +27,7 @@
    			</el-form-item>
    		</el-form> -->
 
-   		<el-table :data="pagination.records" border  style="margin-top: 60px;">
+   		<el-table :data="pagination.records" border  style="margin-top: 8px;">
    			<!-- <el-table-column prop="questionId" label="题目ID" width="120"></el-table-column> -->
    			<el-table-column prop="studentId" label="stuID" width="120"></el-table-column>
    			<el-table-column prop="studentName" label="姓名" width="120"></el-table-column>
@@ -218,7 +218,7 @@ import PageHeader from '@/components/common/PageHeader'
    </script>
    <style lang="less" scoped>
    	.all {
-   		padding: 0px 40px;
+		padding: 0;
 
    		.page {
    			margin-top: 20px;
@@ -231,9 +231,7 @@ import PageHeader from '@/components/common/PageHeader'
    			margin-left: 20px;
    		}
 
-   		.el-table tr {
-   			background-color: #dd5862 !important;
-   		}
+   		
    	}
 
    	.el-table .warning-row {

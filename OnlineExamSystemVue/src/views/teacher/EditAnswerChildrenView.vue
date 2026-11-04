@@ -507,7 +507,8 @@ export default {
     .change {
       margin-top: 20px;
       padding: 20px 16px;
-      background-color: #e7f6f6;
+      background: #f8fafd;
+				border: 1px solid var(--oes-border);
       border-radius: 4px;
       .title {
         padding-left: 6px;

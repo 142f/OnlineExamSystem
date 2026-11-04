@@ -1299,3 +1299,70 @@
 		text-align: left;
 	}
 </style>
+<!-- 视觉统一：仅覆盖颜色/间距/圆角，不改动任何交互与结构 -->
+<style lang="less">
+	#answer {
+		background: var(--oes-bg);
+		min-height: 100vh;
+	}
+
+	#answer .top {
+		background: linear-gradient(90deg, #2b4de0 0%, #3d7eff 100%);
+		color: #fff;
+		box-shadow: 0 2px 12px rgba(43, 77, 224, 0.28);
+	}
+
+	#answer .top .item li {
+		color: #fff;
+	}
+
+	#answer .flexarea {
+		background: var(--oes-bg);
+	}
+
+	#answer .left {
+		background: #fff;
+		border-right: 1px solid var(--oes-border);
+		box-shadow: var(--oes-shadow-sm);
+	}
+
+	#answer .left .l-bottom .item p {
+		color: var(--oes-text);
+		font-weight: 600;
+	}
+
+	#answer .left .l-bottom ul li a {
+		border-radius: 8px;
+	}
+
+	#answer .right {
+		background: transparent;
+	}
+
+	#answer .content {
+		background: #fff;
+		border-radius: var(--oes-radius);
+		box-shadow: var(--oes-shadow-sm);
+		padding: 24px;
+	}
+
+	#answer .right .title {
+		color: var(--oes-text);
+		font-weight: 600;
+	}
+
+	#answer .analysis ul li:nth-child(3) {
+		background: #f8fafd;
+		color: var(--oes-text-secondary);
+	}
+
+	#answer .operation {
+		background: #fff;
+		border-top: 1px solid var(--oes-border);
+		padding: 12px 24px;
+	}
+
+	#answer .operation .el-button {
+		border-radius: 8px;
+	}
+</style>
