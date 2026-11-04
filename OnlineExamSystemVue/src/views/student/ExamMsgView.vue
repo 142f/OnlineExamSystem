@@ -1,6 +1,7 @@
 // 点击试卷后的缩略信息
 <template>
-	<div id="msg">
+	<div class="oes-page" id="msg">
+    <PageHeader title="作业详情" subtitle="查看作业信息与题目构成，确认后开始答题" />
 		<div class="title">
 			<span>作业列表</span>
 			<span>/ {{examData.source}}</span>
@@ -100,7 +101,10 @@
 </template>
 
 <script>
+import PageHeader from '@/components/common/PageHeader'
+
 	export default {
+  components: { PageHeader },
 		data() {
 			return {
 				dialogVisible: false, //对话框属性

@@ -1,5 +1,6 @@
    <template>
-   	<div class="all">
+   	<div class="all oes-page">
+    <PageHeader title="分数详情" subtitle="查看每次作业的客观题、主观题与总分构成" />
    		<!-- todo通过cookie得到当前用户姓名，id -->
    		<div class="title" style="font-size: 24px;">
    			<i class="iconfont icon-r-refresh" style="font-size: 30px;"></i>
@@ -84,7 +85,10 @@
    </template>
 
    <script>
+import PageHeader from '@/components/common/PageHeader'
+
    	export default {
+  components: { PageHeader },
    		data() {
    			return {
    				pagination: {
@@ -142,8 +146,8 @@
    				var major = (this.condition.major.trim() == "" ? "@" : this.condition.major);
    				var clazz = (this.condition.clazz.trim() == "" ? "@" : this.condition.clazz);
    				this.$axios(
-   					`/api/daQuestionDetail/${this.pagination.current}/${this.pagination.size}/${this.user.userId }`
-   				).then(res => {
+					`/api/daQuestion$1/${this.pagination.current}/${this.pagination.size}/${this.user.userId}`
+				).then(res => {
    					this.pagination = res.data.data;
    					console.log(this.pagination)
    				}).catch(error => {});
@@ -260,4 +264,8 @@
    	.el-table .success-row {
    		background: #dd5862;
    	}
-   </style>
+     /* legacy-title-hidden：旧标题已由 PageHeader 取代 */
+  .title {
+    display: none;
+  }
+</style>

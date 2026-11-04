@@ -1,6 +1,7 @@
 // 修改题库
 <template>
-  <div class="add">
+  <div class="add oes-page">
+    <PageHeader title="编辑题目" subtitle="修改题干、答案与解析" />
     <el-tabs v-model="activeName">
       <el-tab-pane name="first">
         <span slot="label"><i class="el-icon-circle-plus"></i> 编辑试题</span>
@@ -260,7 +261,10 @@
 </template>
 
 <script>
+import PageHeader from '@/components/common/PageHeader'
+
 export default {
+  components: { PageHeader },
   data() {
     return {
       activeName: "first", //活动选项卡

@@ -1,6 +1,7 @@
 // 添加题库
 <template>
-	<div class="add">
+	<div class="add oes-page">
+    <PageHeader title="试卷组题" subtitle="按题型数量从题库随机抽题生成试卷" />
 		<el-tabs v-model="activeName">
 			<el-tab-pane name="first">
 				<span slot="label"><i class="el-icon-circle-plus"></i>添加试题</span>
@@ -245,7 +246,10 @@
 </template>
 
 <script>
+import PageHeader from '@/components/common/PageHeader'
+
 	export default {
+  components: { PageHeader },
 		data() {
 			return {
 				changeNumber: null, //选择题出题数量

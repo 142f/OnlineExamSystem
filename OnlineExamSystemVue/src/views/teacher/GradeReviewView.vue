@@ -1,7 +1,8 @@
 //教师作业评分
    
    <template>
-   	<div class="all">
+   	<div class="all oes-page">
+    <PageHeader title="作业批改" subtitle="查看学生主观题作答并重新评分" />
    		<!-- todo通过cookie得到当前用户姓名，id -->
    		<div class="title" style="font-size: 24px;">
    			<i class="iconfont icon-r-refresh" style="font-size: 30px;"></i>
@@ -84,7 +85,10 @@
    </template>
 
    <script>
+import PageHeader from '@/components/common/PageHeader'
+
    	export default {
+  components: { PageHeader },
    		data() {
    			return {
    				pagination: {

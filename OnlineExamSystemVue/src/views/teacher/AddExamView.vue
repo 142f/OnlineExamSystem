@@ -1,56 +1,43 @@
-<!-- 添加作业 -->
 <template>
-    <section class="add">
-        <el-form ref="form" :model="form" label-width="80px">
-            <el-form-item label="作业名称">
-                <el-input v-model="form.source"></el-input>
+  <div class="oes-page">
+    <PageHeader title="添加作业" subtitle="选择试卷并配置作业时间、范围与须知">
+      <template #actions>
+        <el-button icon="el-icon-back" @click="$router.push('/selectExam')">返回列表</el-button>
+      </template>
+    </PageHeader>
+
+    <div class="oes-card form-card">
+      <el-form ref="form" :model="form" label-width="100px">
+        <el-row :gutter="16">
+          <el-col :span="12"><el-form-item label="作业名称"><el-input v-model="form.source" placeholder="如：计算机网络" /></el-form-item></el-col>
+          <el-col :span="12"><el-form-item label="作业类型"><el-input v-model="form.type" placeholder="如：期末考试" /></el-form-item></el-col>
+          <el-col :span="24"><el-form-item label="介绍"><el-input v-model="form.description" placeholder="一句话说明本次作业" /></el-form-item></el-col>
+          <el-col :span="12"><el-form-item label="所属学院"><el-input v-model="form.institute" /></el-form-item></el-col>
+          <el-col :span="12"><el-form-item label="所属专业"><el-input v-model="form.major" /></el-form-item></el-col>
+          <el-col :span="12"><el-form-item label="年级"><el-input v-model="form.grade" /></el-form-item></el-col>
+          <el-col :span="12">
+            <el-form-item label="提交日期">
+              <el-date-picker v-model="form.examDate" value-format="yyyy-MM-dd" placeholder="选择日期" style="width: 100%" />
             </el-form-item>
-            <el-form-item label="介绍">
-                <el-input v-model="form.description"></el-input>
-            </el-form-item>
-            <el-form-item label="所属学院">
-                <el-input v-model="form.institute"></el-input>
-            </el-form-item>
-            <el-form-item label="所属专业">
-                <el-input v-model="form.major"></el-input>
-            </el-form-item>
-            <el-form-item label="年级">
-                <el-input v-model="form.grade"></el-input>
-            </el-form-item>
-            <el-form-item label="作业提交日期">
-                <el-col :span="11">
-                    <el-date-picker
-                        placeholder="选择日期"
-                        v-model="form.examDate"
-                        style="width: 100%"
-                        value-format="yyyy-MM-dd"
-                    ></el-date-picker>
-                </el-col>
-            </el-form-item>
-            <el-form-item label="持续时间">
-                <el-input v-model="form.totalTime"></el-input>
-            </el-form-item>
-            <!-- <el-form-item label="总分">
-        <el-input v-model="form.totalScore"></el-input>
-      </el-form-item> -->
-            <el-form-item label="作业类型">
-                <el-input v-model="form.type"></el-input>
-            </el-form-item>
-            <el-form-item label="作业提示">
-                <el-input type="textarea" v-model="form.tips"></el-input>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="primary" @click="onSubmit()" 
-                    > 立即创建</el-button
-                >
-                <el-button type="danger" @click="cancel()" > 取消</el-button>
-            </el-form-item>
-        </el-form>
-    </section>
+          </el-col>
+          <el-col :span="12"><el-form-item label="持续时间"><el-input v-model="form.totalTime" placeholder="单位：分钟" /></el-form-item></el-col>
+          <el-col :span="24"><el-form-item label="作业提示"><el-input type="textarea" :rows="3" v-model="form.tips" placeholder="考生须知，如：禁止切屏" /></el-form-item></el-col>
+        </el-row>
+
+        <div class="form-actions">
+          <el-button @click="cancel()">取 消</el-button>
+          <el-button type="primary" @click="onSubmit()">立即创建</el-button>
+        </div>
+      </el-form>
+    </div>
+  </div>
 </template>
 
 <script>
+import PageHeader from '@/components/common/PageHeader'
+
 export default {
+  components: { PageHeader },
     data() {
         return {
             form: {
@@ -200,10 +187,14 @@ export default {
     },
 };
 </script>
-<style lang="less" scoped>
-.add {
-    padding: 0px 40px;
-    width: 400px;
+<style scoped>
+.form-card {
+  max-width: 960px;
+}
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 8px;
 }
 </style>
-

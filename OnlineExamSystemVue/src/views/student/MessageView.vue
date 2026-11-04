@@ -1,37 +1,43 @@
-//   交流区
 <template>
-  <div id="message">
+  <div class="oes-page">
+    <PageHeader title="交流区" subtitle="发布留言、回复同学，教师与学生均可参与讨论" />
 
-    <div class="title" style="font-size: 24px;">
-      <i class="iconfont icon-r-refresh" style="font-size: 30px;"></i>
-      交流区
-    </div>
-    <div class="wrapper">
-      <div class="title1">
-        <el-input placeholder="留言标题" v-model="title" clearable>
-        </el-input>
+    <div class="msg-layout">
+      <div class="oes-card msg-compose">
+        <h3>发布留言</h3>
+        <el-input v-model="title" placeholder="留言标题" clearable maxlength="40" show-word-limit />
+        <el-input v-model="content" type="textarea" :rows="5" placeholder="留言内容（不少于 5 个字）" maxlength="300" show-word-limit />
+        <el-button type="primary" icon="el-icon-s-promotion" :loading="submitting" @click="submit()">提交留言</el-button>
+        <p class="msg-compose__tip">文明发言，留言会公开展示给所有用户</p>
       </div>
-      <div class="content">
-        <el-input type="textarea" :rows="3" placeholder="留言内容" v-model="content" clearable>
-        </el-input>
-      </div>
-      <div class="btn">
-        <el-button type="primary" @click="submit()" style="font-size: 18px;"> 提交留言</el-button>
-      </div>
-      <div class="all">
-        <ul class="msglist">
-          <li class="list" @mouseenter="enter(index)" @mouseleave="leave(index)" v-for="(data, index) in msg" :key="index">
-            <p class="title" style="font-size: 20px;"> <i class="iconfont icon-r-user2" style="font-size: 24px;margin-right: 10px;"></i>{{ data.title }}</p><br>
-            <p class="content">{{ data.content }}</p>
-            <p class="date"><i class="iconfont icon-date"></i>{{ data.time }}</p>
-            <div v-for="(replayData, index2) in data.replays" :key="index2">
-              <p class="comment"><i class="iconfont icon-huifuxiaoxi"></i>{{ replayData.replay }}</p>
+
+      <div class="msg-list" v-loading="loading">
+        <div class="oes-card msg-item" v-for="(data, index) in msg" :key="index"
+             @mouseenter="enter(index)" @mouseleave="leave(index)">
+          <div class="msg-item__head">
+            <span class="msg-item__title">
+              <i class="el-icon-chat-dot-square"></i> {{ data.title }}
+            </span>
+            <span class="msg-item__time">{{ data.time }}</span>
+          </div>
+          <p class="msg-item__content">{{ data.content }}</p>
+
+          <div class="msg-item__replies" v-if="data.replays && data.replays.length">
+            <div class="msg-reply" v-for="(replayData, index2) in data.replays" :key="index2">
+              <i class="el-icon-chat-line-round"></i>
+              <span>{{ replayData.replay }}</span>
+              <span class="msg-reply__time">{{ replayData.replayTime }}</span>
             </div>
-            <span class="replay" @click="replay(data.id)" v-if="flag && index == current">回复</span>
-          </li>
-        </ul>
-      </div>
-      <div class="pagination">
+          </div>
+
+          <div class="msg-item__actions">
+            <el-button type="text" icon="el-icon-chat-dot-round" @click="replay(data.id)" v-if="flag && index == current">回复</el-button>
+            <span class="msg-item__count">{{ (data.replays || []).length }} 条回复</span>
+          </div>
+        </div>
+
+        <EmptyState v-if="!loading && msg.length === 0" text="还没有留言，来发布第一条吧" icon="el-icon-chat-dot-square" />
+
         <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
           :current-page="pagination.current" :page-sizes="[4, 6, 8, 10]" :page-size="pagination.size"
           layout="total, sizes, prev, pager, next, jumper" :total="pagination.total">
@@ -42,219 +48,215 @@
 </template>
 
 <script>
+import PageHeader from '@/components/common/PageHeader'
+import EmptyState from '@/components/common/EmptyState'
+
 export default {
-  // name: 'message'
+  components: { PageHeader, EmptyState },
   data() {
     return {
       flag: false,
       current: 0,
-      title: "",
-      content: "",
-      pagination: { //分页后的留言列表
-        current: 1, //当前页
-        total: null, //记录条数
-        size: 4 //每页条数
-      },
+      title: '',
+      content: '',
+      submitting: false,
+      loading: false,
+      pagination: { current: 1, total: null, size: 4 },
       msg: []
     }
   },
   created() {
     this.getMsg()
   },
-  // watch: {
-
-  // },
   methods: {
     getMsg() {
-      this.$axios(`/api/messages/${this.pagination.current}/${this.pagination.size}`).then(res => {
-        let status = res.data.code
-        if (status == 200) {
-          this.msg = res.data.data.records
-          this.pagination = res.data.data
-        }
-      })
+      this.loading = true
+      this.$axios(`/api/messages/${this.pagination.current}/${this.pagination.size}`)
+        .then(res => {
+          if (res.data.code == 200) {
+            this.msg = res.data.data.records
+            this.pagination = res.data.data
+          }
+        })
+        .catch(() => {})
+        .finally(() => {
+          this.loading = false
+        })
     },
-    //改变当前记录条数
     handleSizeChange(val) {
       this.pagination.size = val
       this.getMsg()
     },
-    //改变当前页码，重新发送请求
     handleCurrentChange(val) {
       this.pagination.current = val
       this.getMsg()
-    },
-    // formatTime(date) { //日期格式化
-    //   let year = date.getFullYear()
-    //   let month= date.getMonth()+ 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
-    //   let day=date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
-    //   let hours=date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
-    //   let minutes=date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
-    //   let seconds=date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
-    //   // 拼接
-    //   return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
-    // },
-    submit() {
-      let date = new Date()
-      if (this.title.length == 0 || this.content.length == 0) { //非空判断
-        this.$message({
-          type: 'error',
-          message: '留言标题或内容不能为空',
-        })
-      } else {
-        this.$axios({
-          url: "/api/message",
-          method: "post",
-          data: {
-            title: this.title,
-            content: this.content,
-            time: date
-          }
-        }).then(res => {
-          let code = res.data.code
-          if (code == 200) {
-            this.$message({
-              type: "success",
-              message: "留言成功"
-            })
-          }
-          this.getMsg()
-        })
-      }
-      this.title = ""
-      this.content = ""
-      this.getMsg()
-    },
-    replay(messageId) { //回复留言功能
-      this.$prompt('回复留言', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        inputPattern: /^[\s\S]*.*[^\s][\s\S]*$/,
-        inputErrorMessage: '回复不能为空'
-      }).then(({ value }) => {
-        let date = new Date()
-        console.log(messageId)
-        this.$axios({
-          url: '/api/replay',
-          method: 'post',
-          data: {
-            replay: value,
-            replayTime: date,
-            messageId: messageId
-          }
-        }).then(res => {
-          this.getMsg()
-        })
-        this.$message({
-          type: 'success',
-          message: '回复成功'
-        });
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '取消输入'
-        });
-      });
     },
     enter(index) {
       this.flag = true
       this.current = index
     },
-    leave(index) {
-      this.flag = false;
-      this.current = index;
+    leave() {
+      this.flag = false
+    },
+    submit() {
+      if (!this.title || !this.content) {
+        this.$message.error('留言标题或内容不能为空')
+        return
+      }
+      this.submitting = true
+      this.$axios({
+        url: '/api/message',
+        method: 'post',
+        data: { title: this.title, content: this.content, time: new Date() }
+      })
+        .then(res => {
+          if (res.data.code == 200) {
+            this.$message.success('留言成功')
+            this.title = ''
+            this.content = ''
+          }
+        })
+        .catch(() => this.$message.error('留言失败'))
+        .finally(() => {
+          this.submitting = false
+          this.getMsg()
+        })
+    },
+    replay(messageId) {
+      this.$prompt('回复留言', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        inputPattern: /^[\s\S]*.*[^\s][\s\S]*$/,
+        inputErrorMessage: '回复不能为空'
+      })
+        .then(({ value }) => {
+          this.$axios({
+            url: '/api/replay',
+            method: 'post',
+            data: { replay: value, replayTime: new Date(), messageId: messageId }
+          }).then(() => {
+            this.$message.success('回复成功')
+            this.getMsg()
+          })
+        })
+        .catch(() => {})
     }
   }
 }
 </script>
 
-<style lang="less" scoped>
-.pagination {
+<style scoped>
+.msg-layout {
+  display: grid;
+  grid-template-columns: 360px minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.msg-compose {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  gap: 12px;
+  position: sticky;
+  top: 16px;
 }
 
-#message {
-  width: 980px;
-  margin: 0 auto;
+.msg-compose h3 {
+  margin: 0 0 4px;
+  font-size: 15px;
+  color: var(--oes-text);
 }
 
-.title {
-  margin: 20px;
+.msg-compose__tip {
+  margin: 0;
+  font-size: 12px;
+  color: var(--oes-text-muted);
 }
 
-.content {
-  padding: 20px 0px;
+.msg-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 200px;
 }
 
-#message {
-  .btn {
-    padding-bottom: 20px;
+.msg-item {
+  padding: 18px 20px;
+}
+
+.msg-item__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.msg-item__title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--oes-text);
+}
+
+.msg-item__time {
+  font-size: 12px;
+  color: var(--oes-text-muted);
+  white-space: nowrap;
+}
+
+.msg-item__content {
+  margin: 10px 0;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--oes-text-secondary);
+  white-space: pre-wrap;
+}
+
+.msg-item__replies {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 10px 0;
+  padding: 10px 12px;
+  background: #f8fafd;
+  border-radius: var(--oes-radius-sm);
+}
+
+.msg-reply {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--oes-text-secondary);
+}
+
+.msg-reply i {
+  color: var(--oes-primary);
+}
+
+.msg-reply__time {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--oes-text-muted);
+}
+
+.msg-item__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 24px;
+}
+
+.msg-item__count {
+  font-size: 12px;
+  color: var(--oes-text-muted);
+}
+
+@media (max-width: 1100px) {
+  .msg-layout {
+    grid-template-columns: 1fr;
   }
-
-  .all {
-    .date {
-      color: rgb(80, 157, 202);
-      line-height: 45px;
-      font-size: 13px;
-    }
-
-    .list {
-      background-color: #eee;
-      padding: 10px;
-      border-radius: 4px;
-      margin: 10px 0px;
-      position: relative;
-      transition: all .3s ease;
-
-      .title {
-        color: #5f5f5f;
-        margin: 0px;
-        font-size: 13px;
-        line-height: 30px;
-      }
-
-      .content {
-        padding: 0px;
-      }
-
-      .icon-untitled33 {
-        font-size: 13px;
-        margin-right: 4px;
-      }
-
-      .icon-date {
-        font-size: 13px;
-        margin-right: 4px;
-        color: rgb(80, 157, 202);
-      }
-
-      .replay {
-        position: absolute;
-        right: 30px;
-        bottom: 15px;
-        color: tomato;
-        cursor: pointer;
-        transition: all .3s ease;
-      }
-
-      .comment {
-        margin: -7px 0px;
-        padding-bottom: 12px;
-        font-size: 13px;
-        color: #28b2b4;
-
-        i {
-          margin-right: 4px;
-        }
-      }
-    }
+  .msg-compose {
+    position: static;
   }
-}
-
-#message .wrapper {
-  background-color: #fff;
-  padding: 20px;
-
 }
 </style>

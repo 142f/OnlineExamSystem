@@ -20,6 +20,17 @@ public class GlobalExceptionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
+    /**
+     * 路径参数类型不匹配（例如 /api/daQuestionall/1/6/null）应返回 400，而不是 500。
+     */
+    @ExceptionHandler(value = org.springframework.web.method.annotation.MethodArgumentTypeMismatchException.class)
+    @ResponseBody
+    public ResponseEntity<String> handleTypeMismatch(
+            org.springframework.web.method.annotation.MethodArgumentTypeMismatchException e) {
+        log.warn("请求参数类型错误: {}", e.getMessage());
+        return new ResponseEntity<>("请求参数格式错误", HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(value = Exception.class)
     @ResponseBody
     public ResponseEntity<String> handleException(Exception e) {

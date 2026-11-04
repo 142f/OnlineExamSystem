@@ -1,187 +1,134 @@
 <template>
-	<div class="score">
-		<br />
-		<div class="total">
-			<div class="look">
-				<i class="el-icon-a-061" style="font-size: 32px;"> 本次作业成绩 </i>
-			</div>
-			<div class="show">
-				<div class="number" :class="{ border: isTransition }">
-					<span>{{ score }}</span>
-					<span>分数</span>
-				</div>
-			</div>
-			<ul class="time">
-				<li class="start">
-					<span>开始时间</span> <span>{{ startTime }}</span>
-				</li>
-				<li class="end">
-					<span>结束时间</span> <span>{{ endTime }}</span>
-				</li>
-			</ul>
-		</div>
-	</div>
+  <div class="oes-page">
+    <PageHeader title="本次作业成绩" subtitle="提交成功，以下为本次答题结果" />
+
+    <div class="score-card">
+      <div class="score-ring">
+        <span class="score-ring__value">{{ score }}</span>
+        <span class="score-ring__unit">分</span>
+      </div>
+      <p class="score-tip">成绩已记录，可在「我的分数」中查看全部记录</p>
+
+      <div class="score-meta">
+        <div class="score-meta__item">
+          <span class="label">开始时间</span>
+          <span class="value">{{ startTime || '-' }}</span>
+        </div>
+        <div class="score-meta__item">
+          <span class="label">结束时间</span>
+          <span class="value">{{ endTime || '-' }}</span>
+        </div>
+      </div>
+
+      <div class="score-actions">
+        <el-button icon="el-icon-back" @click="$router.push('/student')">返回作业中心</el-button>
+        <el-button type="primary" icon="el-icon-data-line" @click="$router.push('/scoreTable')">查看我的分数</el-button>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-	export default {
-		data() {
-			return {
-				isTransition: false, //是否渲染完成
-				score: 0, //总分
-				startTime: null, //作业开始时间
-				endTime: null, //作业结束时间
-			};
-		},
-		created() {
-			this.transiton();
-			this.getScore();
-		},
-		methods: {
-			transiton() {
-				//一秒后过渡
-				setTimeout(() => {
-					this.isTransition = true;
-				}, 1000);
-			},
-			// todo
-			getScore() {
-				let score = this.$route.query.score;
-				let startTime = this.$route.query.startTime;
-				let endTime = this.$route.query.endTime;
-				this.score = score;
-				this.startTime = startTime;
-				this.endTime = endTime;
-			},
-		},
-	};
+import PageHeader from '@/components/common/PageHeader'
+
+export default {
+  components: { PageHeader },
+  data() {
+    return {
+      isTransition: false,
+      score: 0,
+      startTime: null,
+      endTime: null
+    }
+  },
+  created() {
+    this.transiton()
+    this.getScore()
+  },
+  methods: {
+    transiton() {
+      setTimeout(() => {
+        this.isTransition = true
+      }, 1000)
+    },
+    getScore() {
+      this.score = this.$route.query.score || 0
+      this.startTime = this.$route.query.startTime
+      this.endTime = this.$route.query.endTime
+    }
+  }
+}
 </script>
 
-<style lang="less" scoped>
-	.show {
-		display: flex;
-		justify-content: center;
-		align-items: center;
+<style scoped>
+.score-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 48px 24px;
+  background: var(--oes-surface);
+  border-radius: var(--oes-radius);
+  box-shadow: var(--oes-shadow-sm);
+}
 
-		img {
-			width: 160px;
-			height: 160px;
-		}
+.score-ring {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 30%, #eaf1ff 0%, #f7faff 70%);
+  border: 8px solid #dbe7ff;
+  color: var(--oes-primary);
+}
 
-		.img1Transform {
-			opacity: 1 !important;
-			transform: translateX(30px) !important;
-			transition: all 0.6s ease !important;
-		}
+.score-ring__value {
+  font-size: 56px;
+  font-weight: 700;
+  line-height: 180px;
+}
 
-		.img2Transform {
-			opacity: 1 !important;
-			transform: translateX(-30px) !important;
-			transition: all 0.6s ease !important;
-		}
+.score-ring__unit {
+  margin-left: 4px;
+  font-size: 16px;
+  color: var(--oes-text-muted);
+}
 
-		.img1 {
-			margin-top: 70px;
-			opacity: 0;
-			transform: translateX(0px);
-			transition: all 0.6s ease;
-		}
+.score-tip {
+  margin: 18px 0 28px;
+  color: var(--oes-text-muted);
+  font-size: 13px;
+}
 
-		.img2 {
-			margin-top: 30px;
-			opacity: 0;
-			transform: translateX(0px);
-			transition: all 0.6s ease;
-		}
-	}
+.score-meta {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 28px;
+}
 
-	.time {
-		padding: 0px 70px;
+.score-meta__item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 160px;
+  padding: 12px 16px;
+  background: #f8fafd;
+  border-radius: var(--oes-radius-sm);
+}
 
-		li {
-			display: flex;
-			justify-content: space-around;
-			padding: 10px;
-			margin: 20px 0px;
-		}
+.score-meta__item .label {
+  font-size: 12px;
+  color: var(--oes-text-muted);
+}
 
-		li:nth-child(1) {
-			background-color: #fcf8e3;
-		}
+.score-meta__item .value {
+  font-size: 14px;
+  color: var(--oes-text);
+}
 
-		li:nth-child(2) {
-			background-color: #e9f5e9;
-		}
-	}
-
-	.border {
-		border: 6px solid #36aafd !important;
-		transition: all 2s ease;
-		width: 160px !important;
-		height: 160px !important;
-		transform: rotate(360deg) !important;
-		opacity: 1 !important;
-	}
-
-	.score {
-		max-width: 800px;
-		margin: 0 auto;
-
-		.title {
-			margin: 60px 0px 30px 0px;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			flex-direction: column;
-
-			.name {
-				font-size: 26px;
-				color: inherit;
-				font-weight: 500;
-			}
-
-			.description {
-				font-size: 14px;
-				color: #888;
-			}
-		}
-
-		.total {
-			border: 1px solid #dbdbdb;
-			background-color: #fff;
-			padding: 40px;
-
-			.look {
-				border-bottom: 1px solid #dbdbdb;
-				padding: 0px 0px 14px 14px;
-				color: #36aafd;
-			}
-
-			.number {
-				opacity: 0;
-				border: 6px solid #fff;
-				transform: rotate(0deg);
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				flex-direction: column;
-				margin: 0 auto;
-				width: 160px;
-				height: 160px;
-				border-radius: 50%;
-				margin-top: 80px;
-				margin-bottom: 20px;
-				transition: all 1s ease;
-
-				span:nth-child(1) {
-					font-size: 36px;
-					font-weight: 600;
-				}
-
-				span:nth-child(2) {
-					font-size: 14px;
-				}
-			}
-		}
-	}
+.score-actions {
+  display: flex;
+  gap: 12px;
+}
 </style>

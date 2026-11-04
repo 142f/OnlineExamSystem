@@ -1,168 +1,104 @@
 <template>
-	<div class="part">
-		<div class="box" ref="box"></div>
-		<div v-if="isNull">
-			<span>该门作业还没人参考哦,请提醒学生参加作业。</span>
-		</div>
-	</div>
+  <div class="oes-page">
+    <PageHeader :title="title" subtitle="按得分比例统计各分数段人数">
+      <template #actions>
+        <el-button icon="el-icon-back" @click="$router.push('/selectExamToPart')">返回作业列表</el-button>
+      </template>
+    </PageHeader>
+
+    <div class="oes-card">
+      <div v-show="!isEmpty" ref="box" class="chart"></div>
+      <EmptyState v-if="isEmpty" text="该作业还没有学生参加" icon="el-icon-pie-chart" />
+    </div>
+  </div>
 </template>
 
-<!-- 以下为修改后的内容 todo -->
-<!-- <template>
-	<div id="part">
-		<div ref="box" class="box"></div>
-		<div class="notFound" v-if="isNull">
-			<i class="iconfont icon-LC_icon_tips_fill"></i><span>该门作业还没人参考哦,请提醒学生参加作业</span>
-		</div>
-	</div>
-</template> -->
-
 <script>
-	export default {
-		name: "part",
-		data() {
-			return {
-				isNull: false, //是否有成绩标志位
-				name: null,
-				category: { //保存分数段
-					'成绩比例为90分及以上': 0,
-					'成绩比例为80-89分': 0,
-					'成绩比例为70-79分': 0,
-					'成绩比例为60-69分': 0,
-					'成绩比例为60分以下': 0,
-				}
-			}
-		},
-		created() {
-			this.getScoreInfo()
+import PageHeader from '@/components/common/PageHeader'
+import EmptyState from '@/components/common/EmptyState'
 
-		},
-		methods: {
-			getScoreInfo() {
-				let examCode = this.$route.query.examCode
-				this.name = this.$route.query.source
-				this.$axios(`/api/scores/${examCode}`).then(res => {
-					let data = res.data.data
+const LABELS = ['90 分及以上', '80-89 分', '70-79 分', '60-69 分', '60 分以下']
 
-					// if (data.length > 0) {   
-					//以下为修改后  todo
-					if (res.data.code == 200) {
-						let box = this.$refs['box']
-						let charts = this.$echarts.init(box)
-						data.forEach(element => {
-							// todo  element.etScore+element.dScore  满分没有100分如何
-							// switch (element.etScore  / 10) {
-						// console.log("------123")
-						var etScore = Number(element.etScore) || 0; // 如果不是数字，则默认为 0  
-						var dScore = Number(element.dScore) || 0; // 如果不是数字，则默认为 0  
-						var score = Number(element.score) || 1; // 如果不是数字或 0，则默认为 1（避免除以 0）
-						var result = (etScore + dScore) * 10 / score;  
-						
-						var result2 = Math.floor(result);  
-						
-						console.log("---result2");
-						console.log(result2);
-						
-						// console.log(etScore)
-						// console.log("---dScor")
-						// console.log(dScore)
-						// console.log(score)
-						// console.log("---result")
-						// console.log(result)
-						//无法计算未nan (element.etScore + element.dScor) * 10 / element.score	
-							switch (result2) {
-								case 10:
-								case 9:
-									this.category["成绩比例为90分及以上"]++
-									break
-								case 8:
-									this.category['成绩比例为80-89分']++
-									break
-								case 7:
-									this.category["成绩比例为70-79分"]++
-									break
-								case 6:
-									this.category['成绩比例为60-69分']++
-									break
-								default:
-									this.category['成绩比例为60分以下']++
-							}
-						});
-						let option = {
-							title: {
-								text: `${this.name}分数段图`,
-								subtext: '分数段饼图',
-								x: 'center'
-							},
-							tooltip: {
-								trigger: 'item',
-								formatter: "{a}：{b} <br/> {c}人 ({d}%)"
-							},
-							legend: {
-								orient: 'vertical',
-								left: 'left',
-								data: ['成绩比例为90分及以上', '成绩比例为80-89分', '成绩比例为70-79分', '成绩比例为60-69分',
-									'成绩比例为60分以下']
-							},
-							series: [{
-								name: '分数段',
-								type: 'pie',
-								radius: '35%',
-								center: ['50%', '35%'],
-								data: [{
-										// todo 比例值计算
-										value: this.category['成绩比例为90分及以上'],
-										name: '成绩比例为90分及以上'
-									},
-									{
-										value: this.category['成绩比例为80-89分'],
-										name: '成绩比例为80-89分'
-									},
-									{
-										value: this.category['成绩比例为70-79分'],
-										name: '成绩比例为70-79分'
-									},
-									{
-										value: this.category['成绩比例为60-69分'],
-										name: '成绩比例为60-69分'
-									},
-									{
-										value: this.category['成绩比例为60分以下'],
-										name: '成绩比例为60分以下'
-									}
-								],
-								itemStyle: {
-									emphasis: {
-										shadowBlur: 10,
-										shadowOffsetX: 0,
-										shadowColor: 'rgba(0, 0, 0, 0.5)'
-									}
-								}
-							}]
-						};
-						charts.setOption(option)
-					} else {
-						this.isNull = true;
-					}
-				})
-			}
-		},
+export default {
+  name: 'part',
+  components: { PageHeader, EmptyState },
+  data() {
+    return {
+      title: '成绩分段',
+      isEmpty: false,
+      category: [0, 0, 0, 0, 0]
+    }
+  },
+  mounted() {
+    this.getScoreInfo()
+    window.addEventListener('resize', this.handleResize)
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.handleResize)
+  },
+  methods: {
+    handleResize() {
+      if (this.chart) this.chart.resize()
+    },
+    getScoreInfo() {
+      const examCode = this.$route.query.examCode
+      const source = this.$route.query.source
+      if (source) this.title = source + ' · 分数段'
+      if (!examCode) {
+        this.isEmpty = true
+        return
+      }
+      this.$axios(`/api/scores/${examCode}`).then(res => {
+        const list = res.data.data || []
+        if (!list.length) {
+          this.isEmpty = true
+          return
+        }
+        list.forEach(item => {
+          const et = Number(item.etScore) || 0
+          const d = Number(item.dScore) || 0
+          const full = Number(item.score) || 0
+          const ratio = full > 0 ? ((et + d) * 100) / full : 0
+          if (ratio >= 90) this.category[0]++
+          else if (ratio >= 80) this.category[1]++
+          else if (ratio >= 70) this.category[2]++
+          else if (ratio >= 60) this.category[3]++
+          else this.category[4]++
+        })
 
-	}
+        const total = this.category.reduce((a, b) => a + b, 0)
+        if (!total) {
+          this.isEmpty = true
+          return
+        }
+
+        this.chart = this.$echarts.init(this.$refs.box)
+        this.chart.setOption({
+          tooltip: { trigger: 'item', formatter: '{b}：{c} 人（{d}%）' },
+          legend: { bottom: 0, icon: 'circle', textStyle: { color: '#4b5563' } },
+          color: ['#3d7eff', '#22c55e', '#f59e0b', '#8b5cf6', '#ef4444'],
+          series: [{
+            name: '分数段',
+            type: 'pie',
+            radius: ['45%', '68%'],
+            center: ['50%', '45%'],
+            avoidLabelOverlap: true,
+            itemStyle: { borderColor: '#fff', borderWidth: 2 },
+            label: { formatter: '{b}\n{c} 人', color: '#4b5563' },
+            data: LABELS.map((label, i) => ({ value: this.category[i], name: label }))
+          }]
+        })
+      }).catch(() => {
+        this.isEmpty = true
+      })
+    }
+  }
+}
 </script>
 
-<style lang="less" scoped>
-	.part {
-		.box {
-			width: 800px;
-			height: 800px;
-			margin-left: 40px;
-		}
-
-		.notFound {
-			position: absolute;
-			top: 0px;
-			left: 0px;
-		}
-	}
+<style scoped>
+.chart {
+  width: 100%;
+  height: 460px;
+}
 </style>

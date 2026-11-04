@@ -4,7 +4,8 @@
 -->
 //获取试卷并跳转到添加题库
 <template>
-  <div class="exam">
+  <div class="exam oes-page">
+    <PageHeader title="新增题目" subtitle="选择试卷后进入对应题型的录题页面" />
     <el-table :data="pagination.records" border>
       <el-table-column fixed="left" prop="source" label="作业名称" width="180"></el-table-column>
       <el-table-column prop="description" label="介绍" width="200"></el-table-column>
@@ -35,7 +36,10 @@
 </template>
 
 <script>
+import PageHeader from '@/components/common/PageHeader'
+
 export default {
+  components: { PageHeader },
   data() {
     return {
       form: {}, //保存点击以后当前试卷的信息
