@@ -170,7 +170,6 @@ INSERT INTO `fill_question` VALUES (10025, '计算机网络', '局域网络参�
 INSERT INTO `fill_question` VALUES (10026, '计算机网络', '路由器的核心是 () 。', ' 路由表', NULL, 2, '3', NULL);
 INSERT INTO `fill_question` VALUES (10027, '计算机网络', '若 HDLC 帧数据段中出现比特串“ 01011111110 ”，则比特填充后的输出为()', '10111110110', NULL, 2, '5', NULL);
 INSERT INTO `fill_question` VALUES (10028, '计算机网络', '数字调制的三种基本形式：移幅键控法ASK、 ()、移相键控法PSK', '移频键控法FSK', NULL, 2, '5', NULL);
-INSERT INTO `fill_question` VALUES (10029, '计算机网络', '从计算机网络系统组成的角度看，计算机网络可以分为()和()', '(拉拉)(方法)', '', 2, '5', '网络系统');
 
 -- ----------------------------
 -- Table structure for judge_question
@@ -280,7 +279,6 @@ INSERT INTO `multi_question` VALUES (10030, '计算机网络', 'LAN参考模型�
 INSERT INTO `multi_question` VALUES (10031, '测试', '测试', 'A', 'B', 'C', 'D', 'B', '解析', 2, '测试', '4');
 INSERT INTO `multi_question` VALUES (10032, '计算机网络', 'DNS 服务器和DHCP服务器的作用是（）', 'A', 'B', 'C', 'D', 'B', '哦解析', 2, '网络层', '2');
 INSERT INTO `multi_question` VALUES (10033, 'Java程序设计', 'DNS 服务器和DHCP服务器的作用是（）', '11', '12', '13', '14', 'B', '', 2, '概论', '2');
-INSERT INTO `multi_question` VALUES (10034, '高等数学', 'DNS 服务器和DHCP服务器的作用是（）', '12', '13', '14', '15', 'A', '', 2, '3', '1');
 
 -- ----------------------------
 -- Table structure for paper_manage
@@ -368,7 +366,6 @@ INSERT INTO `paper_manage` VALUES (1011, 3, 10007);
 INSERT INTO `paper_manage` VALUES (1011, 3, 10003);
 INSERT INTO `paper_manage` VALUES (1011, 3, 10002);
 INSERT INTO `paper_manage` VALUES (1011, 3, 10012);
-INSERT INTO `paper_manage` VALUES (1001, 2, 10029);
 INSERT INTO `paper_manage` VALUES (1012, 1, 10025);
 INSERT INTO `paper_manage` VALUES (1012, 1, 10007);
 INSERT INTO `paper_manage` VALUES (1012, 1, 10030);
@@ -379,7 +376,6 @@ INSERT INTO `paper_manage` VALUES (1012, 2, 10013);
 INSERT INTO `paper_manage` VALUES (1012, 2, 10009);
 INSERT INTO `paper_manage` VALUES (1012, 2, 10010);
 INSERT INTO `paper_manage` VALUES (1012, 2, 10022);
-INSERT INTO `paper_manage` VALUES (1012, 2, 10029);
 INSERT INTO `paper_manage` VALUES (1012, 2, 10011);
 INSERT INTO `paper_manage` VALUES (1012, 2, 10015);
 INSERT INTO `paper_manage` VALUES (1012, 2, 10018);
@@ -397,7 +393,6 @@ INSERT INTO `paper_manage` VALUES (1012, 3, 10005);
 INSERT INTO `paper_manage` VALUES (1012, 3, 10003);
 INSERT INTO `paper_manage` VALUES (1012, 3, 10012);
 INSERT INTO `paper_manage` VALUES (1012, 3, 10009);
-INSERT INTO `paper_manage` VALUES (1012, 1, 10034);
 INSERT INTO `paper_manage` VALUES (1001, 1, 10024);
 INSERT INTO `paper_manage` VALUES (1001, 1, 10003);
 INSERT INTO `paper_manage` VALUES (1001, 2, 10001);
