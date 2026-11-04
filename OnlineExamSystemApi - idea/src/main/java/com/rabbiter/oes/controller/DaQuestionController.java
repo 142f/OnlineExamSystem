@@ -48,8 +48,24 @@ public class DaQuestionController {
     }
 
 
+    /**
+     * 提交大题作答（推荐）：答案走 JSON body，避免中文/特殊字符的 URL 编码问题。
+     */
+    @PostMapping("/daQuestionAnswer")
+    public ApiResult answer(@RequestBody DaQuestion daQuestion) {
+        if (daQuestion.getStudentId() == null || daQuestion.getQuestionId() == null) {
+            return ApiResultHandler.buildApiResult(400, "缺少学生编号或题目编号", null);
+        }
+        daQuestionService.update2(daQuestion.getStudentId(), daQuestion.getQuestionId(), daQuestion.getAnswerMe());
+        return ApiResultHandler.buildApiResult(200, "提交成功", null);
+    }
+
     ///要获得examCoe 加入数据库
     // TODO: 2024/3/27 处理前端大题的答题内容
+    /**
+     * @deprecated 请改用 POST /daQuestionAnswer（答案放 body）
+     */
+    @Deprecated
     @GetMapping("/daQuestionUpdate/{studentId}/{questionId}/{answerMe}")
     public void update2(@PathVariable Integer studentId, @PathVariable Integer questionId,
                         @PathVariable String answerMe) {

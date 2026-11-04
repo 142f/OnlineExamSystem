@@ -658,12 +658,15 @@
 						
 						if (!this.isPractice) {
 							console.log("大题 提交内容");
-							this.$axios(
-								`/api/daQuestionUpdate/${this.userInfo.id}
-							/${this.topic[4][this.index].questionId}/${this.fillAnswer2[this.index][0] }`
-							).then(res => {
-						
-							}).catch(error => {});
+							this.$axios({
+								url: '/api/daQuestionAnswer',
+								method: 'post',
+								data: {
+									studentId: this.userInfo.id,
+									questionId: this.topic[4][this.index].questionId,
+									answerMe: this.fillAnswer2[this.index][0]
+								}
+							}).then(() => {}).catch(() => {});
 						}
 						//目前只是进去是传递，第一次为空 ，设置为离开时传递或者输入时 或者考试结束时todo
 						// this.$axios(
@@ -792,12 +795,15 @@
 				console.log("2");
 				if (!this.isPractice) {
 					console.log("commit里  打印isPractice");
-					this.$axios(
-						`/api/daQuestionUpdate/${this.userInfo.id}
-					/${this.topic[4][this.index].questionId}/${this.fillAnswer2[this.index][0] }`
-					).then(res => {
-
-					}).catch(error => {});
+					this.$axios({
+						url: '/api/daQuestionAnswer',
+						method: 'post',
+						data: {
+							studentId: this.userInfo.id,
+							questionId: this.topic[4][this.index].questionId,
+							answerMe: this.fillAnswer2[this.index][0]
+						}
+					}).then(() => {}).catch(() => {});
 				}
 
 				topic1Answer.forEach((element, index) => {

@@ -24,8 +24,6 @@ public interface ReplayMapper {
     @Delete("delete from replay where replayId = #{replayId}")
     int delete(Integer replayId);
 
-    @Update("update replay set title = #{title}, replay = #{replay}, replayTime = #{replayTime} where replayId = #{replayId}")
-    int update(Replay replay);
     //判断以replayId 为主键 插入是否冲突
     @Options(useGeneratedKeys = true,keyProperty = "replayId")
     @Insert("insert into replay(messageId,replay,replayTime) values(#{messageId}, #{replay},#{replayTime})")

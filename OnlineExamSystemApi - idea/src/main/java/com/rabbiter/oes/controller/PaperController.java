@@ -13,6 +13,7 @@ import com.rabbiter.oes.service.MultiQuestionService;
 import com.rabbiter.oes.service.PaperService;
 import com.rabbiter.oes.util.ApiResultHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,12 +49,33 @@ public class PaperController {
      * @param type       题目类型。1选择，2填空，3判断，4大题
      * @param questionId 题目id
      */
+    /**
+     * RESTful 版本：删除试卷中的某道题。
+     * 旧的 GET /paper/delete/... 保留一个版本用于兼容历史前端调用，后续可下线。
+     */
+    @DeleteMapping("/paper/{paperId}/{type}/{questionId}")
+    public ApiResult deleteRest(
+            @PathVariable("paperId") String paperId,
+            @PathVariable("type") String type,
+            @PathVariable("questionId") String questionId
+    ) {
+        return removeQuestion(paperId, type, questionId);
+    }
+
+    /**
+     * @deprecated 请改用 DELETE /paper/{paperId}/{type}/{questionId}
+     */
+    @Deprecated
     @GetMapping("/paper/delete/{paperId}/{type}/{questionId}")
     public ApiResult delete(
             @PathVariable("paperId") String paperId,
             @PathVariable("type") String type,
             @PathVariable("questionId") String questionId
     ) {
+        return removeQuestion(paperId, type, questionId);
+    }
+
+    private ApiResult removeQuestion(String paperId, String type, String questionId) {
         try {
             paperService.removeQuestion(paperId, type, questionId);
         } catch (IllegalArgumentException e) {

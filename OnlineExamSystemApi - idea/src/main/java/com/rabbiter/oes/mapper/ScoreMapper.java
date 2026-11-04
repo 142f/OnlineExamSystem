@@ -15,7 +15,10 @@ public interface ScoreMapper {
      * @return
      */
     @Options(useGeneratedKeys = true, keyProperty = "scoreId")
-    @Insert("insert into score(examCode,studentId,subject,ptScore,etScore,score,answerDate) values(#{examCode},#{studentId},#{subject},#{ptScore},#{etScore},#{score},#{answerDate})")
+    @Insert("insert into score(examCode,studentId,subject,ptScore,etScore,score,answerDate) " +
+            "values(#{examCode},#{studentId},#{subject},#{ptScore},#{etScore},#{score},#{answerDate}) " +
+            "on duplicate key update subject = values(subject), ptScore = values(ptScore), " +
+            "etScore = values(etScore), score = values(score), answerDate = values(answerDate)")
     int add(Score score);
 
     @Select("select scoreId,examCode,studentId,subject,ptScore,etScore,score,answerDate " +

@@ -208,10 +208,13 @@
 				var paperId = this.examDetailPaperId;
 				this.$confirm("确认从试卷中移除该试题？")
 					.then((_) => {
-						this.$axios(`/api/paper/delete/${paperId}/${type}/${questionId}`).then(
-							res => { //通过examCode请求试卷详细信息
-								this.getExamDetail(this.examDetailCode, paperId);
-							})
+						this.$axios({
+							url: `/api/paper/${paperId}/${type}/${questionId}`,
+							method: 'delete'
+						}).then(() => {
+							// 删除后刷新试卷详情
+							this.getExamDetail(this.examDetailCode, paperId);
+						})
 					})
 					.catch((_) => {});
 			},

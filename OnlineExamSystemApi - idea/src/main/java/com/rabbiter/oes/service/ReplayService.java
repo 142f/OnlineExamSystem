@@ -14,7 +14,5 @@ public interface ReplayService {
 
     int delete(Integer replayId);
 
-    int update(Replay replay);
-
     int add(Replay replay);
 }

@@ -90,7 +90,7 @@ public class RoleAuthInterceptor implements HandlerInterceptor {
         if ("/item".equals(path) || "/paperManage".equals(path) || "/examManagePaperId".equals(path)) {
             return true;
         }
-        if (path.startsWith("/paper/delete")) {
+        if (path.startsWith("/paper/") && !"GET".equalsIgnoreCase(method)) {
             return true;
         }
         if ("/exam".equals(path) && !"GET".equalsIgnoreCase(method)) {

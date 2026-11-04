@@ -34,10 +34,6 @@ public class ReplayServiceImpl implements ReplayService {
         return replayMapper.delete(replayId);
     }
 
-    @Override
-    public int update(Replay replay) {
-        return replayMapper.update(replay);
-    }
 
     @Override
     public int add(Replay replay) {

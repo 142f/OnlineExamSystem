@@ -1,0 +1,157 @@
+/* 页面级布局：页头 / 工具栏 / 卡片网格 / 空态 / 骨架 */
+.oes-page {
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.oes-page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.oes-page-header__main {
+  min-width: 0;
+}
+
+.oes-page-header__title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--oes-text);
+  line-height: 1.4;
+}
+
+.oes-page-header__subtitle {
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: var(--oes-text-muted);
+  line-height: 1.5;
+}
+
+.oes-page-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+/* 工具栏：筛选 + 操作 */
+.oes-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+  background: var(--oes-surface);
+  border-radius: var(--oes-radius);
+  box-shadow: var(--oes-shadow-sm);
+}
+
+.oes-toolbar__spacer {
+  flex: 1;
+}
+
+.oes-toolbar .el-input,
+.oes-toolbar .el-select,
+.oes-toolbar .el-date-editor {
+  width: 180px;
+}
+
+/* 表格容器 */
+.oes-table-card {
+  background: var(--oes-surface);
+  border-radius: var(--oes-radius);
+  box-shadow: var(--oes-shadow-sm);
+  padding: 4px 20px 20px;
+}
+
+.oes-table-card .el-table {
+  margin-top: 8px;
+}
+
+/* 统计卡网格 */
+.oes-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+/* 空态 */
+.oes-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 16px;
+  color: var(--oes-text-muted);
+}
+
+.oes-empty__icon {
+  font-size: 44px;
+  margin-bottom: 12px;
+  opacity: 0.6;
+}
+
+.oes-empty__text {
+  font-size: 14px;
+}
+
+/* 骨架屏 */
+.oes-skeleton {
+  padding: 16px 0;
+}
+
+.oes-skeleton__row {
+  height: 14px;
+  margin-bottom: 12px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #eef2f7 25%, #f7f9fc 37%, #eef2f7 63%);
+  background-size: 400% 100%;
+  animation: oes-skeleton-loading 1.4s ease infinite;
+}
+
+@keyframes oes-skeleton-loading {
+  0% { background-position: 100% 50%; }
+  100% { background-position: 0 50%; }
+}
+
+/* 行内标签 */
+.oes-tag {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 8px;
+  font-size: 12px;
+  border-radius: 4px;
+  background: var(--oes-primary-light);
+  color: var(--oes-primary);
+}
+
+.oes-tag--success {
+  background: #ecfdf3;
+  color: #15803d;
+}
+
+.oes-tag--warning {
+  background: #fffbeb;
+  color: #b45309;
+}
+
+.oes-tag--danger {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+@media (max-width: 992px) {
+  .oes-page {
+    padding: 16px;
+  }
+  .oes-page-header {
+    flex-direction: column;
+  }
+}
