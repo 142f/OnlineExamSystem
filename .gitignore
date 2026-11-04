@@ -1,0 +1,86 @@
+# ============================================================
+# OnlineExamSystem - 忽略规则
+# 仅提交核心代码、配置模板与必要文档
+# ============================================================
+
+# ---------- 依赖包 ----------
+node_modules/
+bower_components/
+jspm_packages/
+.pnpm-store/
+
+# ---------- 构建与打包产物 ----------
+dist/
+target/
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+coverage/
+.nyc_output/
+*.tgz
+
+# 注意：前端 OnlineExamSystemVue/build 目录存放的是 webpack 构建脚本（源码），
+# 不属于构建产物，因此这里不忽略 build/ 目录。
+
+# ---------- 缓存与临时文件 ----------
+.cache/
+.parcel-cache/
+.temp/
+.tmp/
+*.tmp
+*.bak
+*.orig
+*.rej
+.mvn/
+.mvn/wrapper/maven-wrapper.jar
+hs_err_pid*
+replay_pid*
+
+# ---------- IDE / 编辑器 ----------
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+.settings/
+.project
+.classpath
+.factorypath
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+.history/
+nbproject/private/
+
+# ---------- 操作系统文件 ----------
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# ---------- 本地配置与敏感信息 ----------
+# 数据库账号密码等本地配置不提交，仅提交 application.properties.example 模板
+application.properties
+application-*.properties
+!application.properties.example
+.env
+.env.*
+!.env.example
+.npmrc
+.yarnrc
+*.pem
+*.key
+*.p12
+*.jks
+*.keystore
+secrets.*

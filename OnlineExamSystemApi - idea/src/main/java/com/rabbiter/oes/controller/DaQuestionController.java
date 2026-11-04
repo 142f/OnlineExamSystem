@@ -1,0 +1,149 @@
+package com.rabbiter.oes.controller;
+
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.rabbiter.oes.entity.ApiResult;
+import com.rabbiter.oes.entity.DaQuestion;
+import com.rabbiter.oes.entity.ExamManage;
+import com.rabbiter.oes.entity.Student;
+import com.rabbiter.oes.mapper.ExamManageMapper;
+import com.rabbiter.oes.serviceimpl.DaQuestionServiceImpl;
+import com.rabbiter.oes.serviceimpl.ExamManageServiceImpl;
+import com.rabbiter.oes.serviceimpl.PaperServiceImpl;
+import com.rabbiter.oes.util.ApiResultHandler;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+// TODO: 2024/3/25  
+@RestController
+public class DaQuestionController {
+
+    @Autowired
+    private DaQuestionServiceImpl daQuestionService;
+    @Autowired
+    private ExamManageServiceImpl examManageService;
+    @Autowired
+    private PaperServiceImpl paperService;
+
+//互评需要的作业内容
+    @GetMapping("/daQuestionall/{page}/{size}/{studentId}")
+    public ApiResult findAll(@PathVariable Integer page, @PathVariable Integer size,
+                             @PathVariable Integer studentId) {
+        Page<DaQuestion> DaPage = new Page<>(page, size);
+        IPage<DaQuestion> res = daQuestionService.findAll(DaPage, studentId);
+
+        return ApiResultHandler.buildApiResult(200, "分页查询所有学生da", res);
+    }
+
+//学生--分数详情
+    // TODO: 2024/5/10  分数详情页面
+    @GetMapping("/daQuestionDetail/{page}/{size}/{studentId}")
+    public ApiResult findAll2(@PathVariable Integer page, @PathVariable Integer size,
+                             @PathVariable Integer studentId) {
+        Page<DaQuestion> DaPage = new Page<>(page, size);
+
+        IPage<DaQuestion> res = daQuestionService.findAll2(DaPage, studentId);
+
+        return ApiResultHandler.buildApiResult(200, "分页查询所有学生da", res);
+    }
+
+
+    ///要获得examCoe 加入数据库
+    // TODO: 2024/3/27 处理前端大题的答题内容
+    @GetMapping("/daQuestionUpdate/{studentId}/{questionId}/{answerMe}")
+    public void update2(@PathVariable Integer studentId, @PathVariable Integer questionId,
+                        @PathVariable String answerMe) {
+//        ExamManage res = examManageService.findOnlyPaperId();
+//        Integer examCode = res.getExamCode();
+//        System.out.println();
+//        daQuestionService.update2(studentId, questionId, answerMe,examCode);
+//        Integer examCode = res.getExamCode();
+//        System.out.println();
+
+        daQuestionService.update2(studentId, questionId, answerMe);
+
+    }
+/*
+*更新作业评分
+* */
+    // TODO: 2024/3/26 更新数据库
+    @PutMapping("/daQuestion")
+    public ApiResult update(@RequestBody DaQuestion daQuestion) {
+        Integer studentId = daQuestion.getStudentId();
+        Integer examCode = daQuestion.getExamCode();
+
+        System.out.println(daQuestion.getStudentId() + "---::1");
+        System.out.println(daQuestion.getExamCode() + "---::1");
+
+        int res = daQuestionService.update(daQuestion);
+        daQuestionService.updateScore(studentId,examCode);
+        if (res != 0) {
+            return ApiResultHandler.buildApiResult(200, "更新成功", res);
+        }
+        return ApiResultHandler.buildApiResult(400, "更新失败", res);
+    }
+
+
+    // TODO: 2024   教师可重新评分
+    @GetMapping("/daQuestionallTea/{page}/{size}/{studentId}")
+    public ApiResult findAllTea(@PathVariable Integer page, @PathVariable Integer size,
+                             @PathVariable Integer studentId) {
+        Page<DaQuestion> DaPage = new Page<>(page, size);
+        IPage<DaQuestion> res = daQuestionService.findAllTea(DaPage, studentId);
+        System.out.println(res+"----123");
+        System.out.println("--------findAllTea测试");
+        return ApiResultHandler.buildApiResult(200, "分页查询所有学生da", res);
+    }
+
+    // TODO: 教师端可看，重新评分
+    @PutMapping("/daQuestionTea")
+    public ApiResult update3(@RequestBody DaQuestion daQuestion) {
+        Integer studentId = daQuestion.getStudentId();
+        Integer examCode = daQuestion.getExamCode();
+        System.out.println(daQuestion.getStudentId() + "---::1");
+        System.out.println(daQuestion.getExamCode() + "---::1");
+        int res = daQuestionService.update3(daQuestion);
+        //更新成绩表的主观题分数
+        daQuestionService.updateScore(studentId,examCode);
+        if (res != 0) {
+            return ApiResultHandler.buildApiResult(200, "更新成功", res);
+        }
+        return ApiResultHandler.buildApiResult(400, "更新失败", res);
+    }
+
+
+
+
+/*
+*
+* */
+    @GetMapping("/daQuestionId/{studentIdd}/{questionIdd}")
+    public ApiResult findOnlyQuestionId(@PathVariable Integer studentIdd, @PathVariable Integer questionIdd) {
+        System.out.println("-----评分成功");
+        System.out.println(studentIdd + "-----1");
+        // 直接输出questionId的值，它也会自动调用Integer的toString方法
+        System.out.println(questionIdd + "-----1");
+        DaQuestion res = daQuestionService.findOnlyQuestionId(studentIdd, questionIdd);
+        return ApiResultHandler.buildApiResult(200, "查询成功", res);
+    }
+
+
+    @PostMapping("/daQuestion")
+    public ApiResult add(@RequestBody DaQuestion daQuestion) {
+        int res = daQuestionService.add(daQuestion);
+        if (res != 0) {
+            return ApiResultHandler.buildApiResult(200, "添加成功", res);
+        }
+        return ApiResultHandler.buildApiResult(400, "添加失败", res);
+    }
+
+
+    @PostMapping("/editDaQuestion")
+    public ApiResult edit(@RequestBody DaQuestion daQuestion) {
+        int res = daQuestionService.edit(daQuestion);
+        if (res != 0) {
+            return ApiResultHandler.buildApiResult(200, "修改成功", res);
+        }
+        return ApiResultHandler.buildApiResult(400, "修改失败", res);
+    }
+}
