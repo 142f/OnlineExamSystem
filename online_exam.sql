@@ -27,7 +27,7 @@ CREATE TABLE `admin`  (
   `sex` varchar(2) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '性别',
   `tel` varchar(11) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '电话号码',
   `email` varchar(20) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '电子邮箱',
-  `pwd` varchar(16) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '密码',
+  `pwd` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '密码',
   `cardId` varchar(18) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '身份证号',
   `role` varchar(1) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '角色(0管理员，1教师，2学生)',
   PRIMARY KEY (`adminId`) USING BTREE,
@@ -37,7 +37,7 @@ CREATE TABLE `admin`  (
 -- ----------------------------
 -- Records of admin
 -- ----------------------------
-INSERT INTO `admin` VALUES (9991, '超级管理员', '男', '13652222222', '1253578873@qq.com', '123456', '551444444444447887', '0');
+INSERT INTO `admin` VALUES (9991, '超级管理员', '男', '13652222222', '1253578873@qq.com', '$2a$10$WqcbjOiItLfnRA.wog3mu.F7lvAAqcK1zXX4yaLAEwVYns0dzzx0C', '551444444444447887', '0');
 
 -- ----------------------------
 -- Table structure for da
@@ -482,8 +482,8 @@ CREATE TABLE `score`  (
 -- ----------------------------
 -- Records of score
 -- ----------------------------
-INSERT INTO `score` VALUES (153, 20190024, 20224084, '计算机网络', 1, 12, 18, '2023-11-18');
-INSERT INTO `score` VALUES (154, 20230001, 20224084, '计算机网络', 0, 6, 86, '2023-11-18');
+INSERT INTO `score` VALUES (153, 20190024, 20224084, '计算机网络', 1, 12, 0, 18, '2023-11-18');
+INSERT INTO `score` VALUES (154, 20230001, 20224084, '计算机网络', 0, 6, 0, 86, '2023-11-18');
 
 -- ----------------------------
 -- Table structure for student
@@ -498,7 +498,7 @@ CREATE TABLE `student`  (
   `institute` varchar(30) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '学院',
   `tel` varchar(11) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '电话号码',
   `email` varchar(30) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '电子邮件',
-  `pwd` varchar(16) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '密码',
+  `pwd` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '密码',
   `cardId` varchar(18) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '身份证号',
   `sex` varchar(2) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '性别',
   `role` varchar(1) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT '2' COMMENT '角色(0管理员，1教师，2学生)',
@@ -508,12 +508,12 @@ CREATE TABLE `student`  (
 -- ----------------------------
 -- Records of student
 -- ----------------------------
-INSERT INTO `student` VALUES (20224001, '王六', '2023', '计算机科学与技术', '2', '软件工程学院', '13585411132', 'gblw2331@163.com', '123456', '500234597988722353', '男', '2');
-INSERT INTO `student` VALUES (20224084, '张三', '2023', '计算机科学与技术', '2', '软件工程学院', '13658555557', '13658555557@sina.cn', '123456', '500574111114022353', '男', '2');
-INSERT INTO `student` VALUES (20225003, '李四', '2023', '信息工程', '1', '软件工程学院', '15512345425', '15512345425@163.com', '123456', '500237781114022353', '男', '2');
-INSERT INTO `student` VALUES (20225007, '王五', '2023', '网络工程', '1', '软件工程学院', '18777778457', '187777457@163.com', '123456', '500234565548022353', '女', '2');
-INSERT INTO `student` VALUES (20225008, '徐七', '2023', '信息工程', '2', '软件工程学院', '15111619564', '1511164@163.com', '123456', '500234111114022353', '男', '2');
-INSERT INTO `student` VALUES (20225009, '郑八', '2023', '软件工程', '1班', '计算机学院', '13355555555', '123@qq.com', '123456', '445444444444444444', '男', '2');
+INSERT INTO `student` VALUES (20224001, '王六', '2023', '计算机科学与技术', '2', '软件工程学院', '13585411132', 'gblw2331@163.com', '$2a$10$WqcbjOiItLfnRA.wog3mu.F7lvAAqcK1zXX4yaLAEwVYns0dzzx0C', '500234597988722353', '男', '2');
+INSERT INTO `student` VALUES (20224084, '张三', '2023', '计算机科学与技术', '2', '软件工程学院', '13658555557', '13658555557@sina.cn', '$2a$10$WqcbjOiItLfnRA.wog3mu.F7lvAAqcK1zXX4yaLAEwVYns0dzzx0C', '500574111114022353', '男', '2');
+INSERT INTO `student` VALUES (20225003, '李四', '2023', '信息工程', '1', '软件工程学院', '15512345425', '15512345425@163.com', '$2a$10$WqcbjOiItLfnRA.wog3mu.F7lvAAqcK1zXX4yaLAEwVYns0dzzx0C', '500237781114022353', '男', '2');
+INSERT INTO `student` VALUES (20225007, '王五', '2023', '网络工程', '1', '软件工程学院', '18777778457', '187777457@163.com', '$2a$10$WqcbjOiItLfnRA.wog3mu.F7lvAAqcK1zXX4yaLAEwVYns0dzzx0C', '500234565548022353', '女', '2');
+INSERT INTO `student` VALUES (20225008, '徐七', '2023', '信息工程', '2', '软件工程学院', '15111619564', '1511164@163.com', '$2a$10$WqcbjOiItLfnRA.wog3mu.F7lvAAqcK1zXX4yaLAEwVYns0dzzx0C', '500234111114022353', '男', '2');
+INSERT INTO `student` VALUES (20225009, '郑八', '2023', '软件工程', '1班', '计算机学院', '13355555555', '123@qq.com', '$2a$10$WqcbjOiItLfnRA.wog3mu.F7lvAAqcK1zXX4yaLAEwVYns0dzzx0C', '445444444444444444', '男', '2');
 
 -- ----------------------------
 -- Table structure for teacher
@@ -526,7 +526,7 @@ CREATE TABLE `teacher`  (
   `sex` varchar(2) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '性别',
   `tel` varchar(11) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '电话号码',
   `email` varchar(20) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '邮箱',
-  `pwd` varchar(16) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '密码',
+  `pwd` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '密码',
   `cardId` varchar(18) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '身份证号',
   `type` varchar(20) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '职称',
   `role` varchar(1) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '角色（0管理员，1教师，2学生）',
@@ -536,10 +536,10 @@ CREATE TABLE `teacher`  (
 -- ----------------------------
 -- Records of teacher
 -- ----------------------------
-INSERT INTO `teacher` VALUES (20081001, '张小风', '软件工程学院', '男', '13500008441', '1322@163.com', '123456', '465111111111111111', '讲师', '1');
-INSERT INTO `teacher` VALUES (20081002, '王大志', '软件工程学院', '男', '12312213128', '1231221312@163.com', '123456', '455111111111111233', '讲师', '1');
-INSERT INTO `teacher` VALUES (20081003, '李四', '计算机学院', '男', '13333333333', NULL, '123456', '441111111111111111', '教师', '1');
-INSERT INTO `teacher` VALUES (20081005, '李白', '计算机学院', '女', '15877777777', NULL, '123456', '445111111111111111', '普通人', '1');
-INSERT INTO `teacher` VALUES (20081006, '测试', '测试', '测试', '测试', NULL, '测试', '测试', '测试', '1');
+INSERT INTO `teacher` VALUES (20081001, '张小风', '软件工程学院', '男', '13500008441', '1322@163.com', '$2a$10$WqcbjOiItLfnRA.wog3mu.F7lvAAqcK1zXX4yaLAEwVYns0dzzx0C', '465111111111111111', '讲师', '1');
+INSERT INTO `teacher` VALUES (20081002, '王大志', '软件工程学院', '男', '12312213128', '1231221312@163.com', '$2a$10$WqcbjOiItLfnRA.wog3mu.F7lvAAqcK1zXX4yaLAEwVYns0dzzx0C', '455111111111111233', '讲师', '1');
+INSERT INTO `teacher` VALUES (20081003, '李四', '计算机学院', '男', '13333333333', NULL, '$2a$10$WqcbjOiItLfnRA.wog3mu.F7lvAAqcK1zXX4yaLAEwVYns0dzzx0C', '441111111111111111', '教师', '1');
+INSERT INTO `teacher` VALUES (20081005, '李白', '计算机学院', '女', '15877777777', NULL, '$2a$10$WqcbjOiItLfnRA.wog3mu.F7lvAAqcK1zXX4yaLAEwVYns0dzzx0C', '445111111111111111', '普通人', '1');
+INSERT INTO `teacher` VALUES (20081006, '测试', '测试', '测试', '测试', NULL, '$2a$10$7PpjaUkZLSV4abgr9DO.peT4w.Ic/oPV77d38HzM716DaXCx2IU1O', '测试', '测试', '1');
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -1,6 +1,6 @@
 package com.rabbiter.oes.config;
 
-import com.rabbiter.oes.interceptor.LoginInterceptor;
+import com.rabbiter.oes.security.RoleAuthInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
@@ -11,33 +11,27 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
+
     /**
-     * 配置拦截器
-     * @param registry 相当于拦截器的注册中心
+     * 注册登录态 + 角色鉴权拦截器：
+     * 除登录、登出外的所有接口都需要有效会话；越权访问返回 403。
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new LoginInterceptor())
-                .addPathPatterns()
-                .excludePathPatterns("/login");
+        registry.addInterceptor(new RoleAuthInterceptor())
+                .addPathPatterns("/**")
+                .excludePathPatterns("/login", "/logout", "/error");
     }
 
     @Bean
     public CorsFilter corsFilter() {
-        // 1.创建 CORS 配置对象
         CorsConfiguration config = new CorsConfiguration();
-        // 支持域
         config.addAllowedOrigin("*");
-        // 是否发送 Cookie
         config.setAllowCredentials(true);
-        // 支持请求方式
         config.addAllowedMethod("*");
-        // 允许的原始请求头部信息
         config.addAllowedHeader("*");
-        // 2.添加地址映射
         UrlBasedCorsConfigurationSource corsConfigurationSource = new UrlBasedCorsConfigurationSource();
         corsConfigurationSource.registerCorsConfiguration("/**", config);
-        // 3.返回 CorsFilter 对象
         return new CorsFilter(corsConfigurationSource);
     }
 }

@@ -116,6 +116,11 @@ npm run build                # 产物输出到 dist/
 `Table 'online_exam.da_question' doesn't exist` / `Unknown column 'dScore'` 报 500：
 
 ```sql
+-- 密码改为 BCrypt 存储后需要 60 字符，历史库请先扩容
+ALTER TABLE `admin`   MODIFY COLUMN `pwd` varchar(100) NULL COMMENT '密码(BCrypt)';
+ALTER TABLE `teacher` MODIFY COLUMN `pwd` varchar(100) NULL COMMENT '密码(BCrypt)';
+ALTER TABLE `student` MODIFY COLUMN `pwd` varchar(100) NULL COMMENT '密码(BCrypt)';
+
 ALTER TABLE score ADD COLUMN dScore int(0) NULL DEFAULT 0 COMMENT '主观题成绩' AFTER etScore;
 
 CREATE TABLE IF NOT EXISTS da_question (
@@ -167,6 +172,32 @@ mvn test
 | 管理员 | 9991 | 超级管理员 |
 | 教师 | 20081001 等 | 教师端登录 |
 | 学生 | 20224001 等 | 学生端登录 |
+
+## 认证与权限
+
+### 登录态
+
+- 登录成功后，用户身份（id / 姓名 / 角色）写入**服务端 HttpSession**；前端使用的 `rb_token`、`rb_role`
+  Cookie 仅用于页面路由与展示，**不再作为鉴权依据**（客户端无法通过改 Cookie 提权）。
+- 会话重建：登录时会先失效旧会话再建立新会话，避免会话固定攻击。
+
+### 密码存储
+
+- 密码使用 **BCrypt**（`spring-security-crypto`）存储与校验，数据库中形如 `$2a$10$...`（60 字符）。
+- 兼容历史数据：若库中仍是明文，登录成功后会**自动升级**为 BCrypt 密文，无需手工刷库。
+- 演示账号密码仍为 `123456`（脚本中已是密文）。
+
+### 角色与接口权限
+
+| 角色 | 编码 | 权限范围 |
+| --- | --- | --- |
+| 管理员 | 0 | 全部接口 |
+| 教师 | 1 | 除“管理员/教师账号管理”外的全部接口（组卷、改卷、学生管理、全员成绩等） |
+| 学生 | 2 | 考试列表与详情、试卷与题目只读、本人成绩与资料、留言互动；不能管理学生/教师、不能改卷 |
+
+- 未登录：`401` + 「登录状态已失效，请重新登录」
+- 越权：`403` + 「无权限访问该资源」
+- 学生的 `/student/{id}`、`/score/...` 仅允许访问本人；`PUT /studentPWD` 仅允许修改本人密码。
 
 ## 配置与安全说明
 

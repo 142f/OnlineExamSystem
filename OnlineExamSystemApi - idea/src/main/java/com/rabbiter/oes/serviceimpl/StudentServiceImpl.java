@@ -4,15 +4,19 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.rabbiter.oes.entity.Student;
 import com.rabbiter.oes.mapper.StudentMapper;
+import com.rabbiter.oes.security.PasswordSupport;
 import com.rabbiter.oes.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 @Service
 public class StudentServiceImpl implements StudentService {
     @Autowired
     private StudentMapper studentMapper;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 //"": 如果name的值等于@，则name被重新赋值为空字符串""。
 //    name: 如果name的值不等于@，则name的值保持不变。
@@ -43,16 +47,26 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public int update(Student student) {
+        // 兼容前端回传密文的情况，避免二次加密
+        encodeIfPlaintext(student.getPwd(), student::setPwd);
         return studentMapper.update(student);
     }
 
     @Override
     public int updatePwd(Student student) {
+        encodeIfPlaintext(student.getPwd(), student::setPwd);
         return studentMapper.updatePwd(student);
     }
 
     @Override
     public int add(Student student) {
+        encodeIfPlaintext(student.getPwd(), student::setPwd);
         return studentMapper.add(student);
+    }
+
+    private void encodeIfPlaintext(String rawPwd, java.util.function.Consumer<String> setter) {
+        if (rawPwd != null && !rawPwd.isEmpty() && !PasswordSupport.isEncoded(rawPwd)) {
+            setter.accept(passwordEncoder.encode(rawPwd));
+        }
     }
 }

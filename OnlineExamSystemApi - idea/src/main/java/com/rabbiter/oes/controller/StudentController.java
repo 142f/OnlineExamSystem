@@ -4,10 +4,13 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.rabbiter.oes.entity.ApiResult;
 import com.rabbiter.oes.entity.Student;
+import com.rabbiter.oes.security.LoginUser;
 import com.rabbiter.oes.service.StudentService;
 import com.rabbiter.oes.util.ApiResultHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpSession;
 
 @RestController
 public class StudentController {
@@ -45,7 +48,15 @@ public class StudentController {
     }
 
     @PutMapping("/studentPWD")
-    public ApiResult updatePwd(@RequestBody Student student) {
+    public ApiResult updatePwd(@RequestBody Student student, HttpSession session) {
+        Object attr = session == null ? null : session.getAttribute(LoginUser.SESSION_KEY);
+        if (attr instanceof LoginUser) {
+            LoginUser current = (LoginUser) attr;
+            // 学生只能修改自己的密码，避免越权改他人密码
+            if (current.isStudent() && !current.getId().equals(student.getStudentId())) {
+                return ApiResultHandler.buildApiResult(403, "只能修改本人密码", null);
+            }
+        }
         studentService.updatePwd(student);
         return ApiResultHandler.buildApiResult(200,"密码更新成功",null);
     }

@@ -36,9 +36,10 @@ public interface StudentMapper {
      * @param student 传递一个对象
      * @return 受影响的记录条数
      */
-    @Update("update student set studentName = #{studentName},grade = #{grade},major = #{major},clazz = #{clazz}," +
-            "institute = #{institute},tel = #{tel},email = #{email},pwd = #{pwd},cardId = #{cardId},sex = #{sex},role = #{role} " +
-            "where studentId = #{studentId}")
+    @Update("<script>update student set studentName = #{studentName},grade = #{grade},major = #{major},clazz = #{clazz}," +
+            "institute = #{institute},tel = #{tel},email = #{email},cardId = #{cardId},sex = #{sex},role = #{role}" +
+            "<if test='pwd != null'>,pwd = #{pwd}</if> " +
+            "where studentId = #{studentId}</script>")
     int update(Student student);
 
     /**

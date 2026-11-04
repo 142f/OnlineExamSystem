@@ -22,9 +22,11 @@ public interface TeacherMapper {
     @Delete("delete from teacher where teacherId = #{teacherId}")
     public int deleteById(Integer teacherId);
 
-    @Update("update teacher set teacherName = #{teacherName},sex = #{sex}," +
-            "tel = #{tel}, email = #{email},pwd = #{pwd},cardId = #{cardId}," +
-            "role = #{role},institute = #{institute},type = #{type} where teacherId = #{teacherId}")
+    @Update("<script>update teacher set teacherName = #{teacherName},sex = #{sex}," +
+            "tel = #{tel}, email = #{email},cardId = #{cardId}," +
+            "role = #{role},institute = #{institute},type = #{type}" +
+            "<if test='pwd != null'>,pwd = #{pwd}</if> " +
+            "where teacherId = #{teacherId}</script>")
     public int update(Teacher teacher);
 
     @Options(useGeneratedKeys = true,keyProperty = "teacherId")
