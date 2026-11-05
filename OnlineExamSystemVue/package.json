@@ -16,7 +16,6 @@
     "vue": "^2.5.2",
     "vue-cookies": "^1.5.12",
     "vue-router": "^3.0.1",
-    "vue-vibe": "^8.0.3",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
