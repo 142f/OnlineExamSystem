@@ -270,6 +270,51 @@ JAVA_OPTS=-Xms256m -Xmx512m
 | `where examCode = ?` | 22.9 ms（ALL） | 0.061 ms（ref） |
 | `paper_manage where paperId = ?` | 55.4 ms（ALL） | 0.049 ms（ref） |
 
+
+## 配置文件说明
+
+### 前端（OnlineExamSystemVue）
+
+| 文件 | 作用 | 关键说明 |
+| --- | --- | --- |
+| `.npmrc` | npm 源配置 | 原值为 `registry.npm.taobao.org`，**证书已过期**，安装依赖会报 `CERT_HAS_EXPIRED`。请改为 `registry=https://registry.npmmirror.com` |
+| `package.json` | 依赖与脚本 | 运行依赖：vue 2.5 / vue-router 3 / vuex 3 / element-ui 2.4 / axios 1.7.9 / echarts 5.4.3 / js-cookie 3.0.5；`npm run dev` 启动开发服务（9202），`npm run build` 打包到 `dist/` |
+| `build/webpack.base.conf.js` | webpack 基础配置 | **babel-loader 的 `include` 中必须包含 `resolve('node_modules/axios')`**，否则 axios 1.x 的 ESM 语法会导致 `Failed to compile` |
+| `build/webpack.dev.conf.js` | 开发环境配置 | 端口 9202、HMR、代理见 `config/index.js` |
+| `build/webpack.prod.conf.js` | 生产构建配置 | 输出到 `dist/`，含 gzip / 代码分割 |
+| `config/index.js` | 环境参数 | `dev.port=9202`；`proxyTable['/api']` 指向 `http://localhost:9201`，改后端端口需同步修改 |
+| `config/dev.env.js` / `prod.env.js` | 环境变量 | 仅区分 `NODE_ENV` |
+| `.babelrc` | babel 预设 | vue 2 + stage-2 语法，改动会影响所有组件编译 |
+| `.postcssrc.js` | 样式后处理 | autoprefixer 等 |
+| `Dockerfile` / `nginx.conf` | 容器化 | 构建产物由 nginx 托管，`/api` 反向代理到 backend:9201 |
+| `static/` | 静态资源目录 | webpack copy 插件依赖该目录存在（当前仅保留 `.gitkeep`） |
+
+### 后端（OnlineExamSystemApi - idea）
+
+| 文件 | 作用 | 关键说明 |
+| --- | --- | --- |
+| `src/main/resources/application.properties` | **本地私有配置** | 含数据库账号密码，已被 `.gitignore` 排除，仓库只提交 `application.properties.example` 模板 |
+| `application.properties.example` | 配置模板 | 复制为 `application.properties` 后填写本机 MySQL 账号密码即可启动 |
+| `application-docker.properties` | 容器专用配置 | 全部走环境变量：`DB_URL` / `DB_USER` / `DB_PASSWORD` / `CORS_ORIGINS`，不含任何真实口令 |
+| `pom.xml` | Maven 构建 | Spring Boot 2.1.2 + MyBatis-Plus 3.5.0 + Druid；已配置 `spring-boot-maven-plugin` 生成可 `java -jar` 的 fat jar |
+| `Dockerfile` / `.dockerignore` | 后端镜像 | 多阶段构建；`.dockerignore` 排除了含真实密码的本地 `application.properties` |
+
+### 根目录
+
+| 文件 | 作用 | 关键说明 |
+| --- | --- | --- |
+| `online_exam.sql` | 数据库脚本 | 建库建表 + 索引 + 种子数据 + 演示数据；末尾含幂等的归一化 `UPDATE`（难度等级、判断题 T/F、填空多空 `\|` 分隔、总分重算） |
+| `docker-compose.yml` | 一键部署 | db(3307) / backend(9201) / frontend(9202)；数据库密码通过 `DB_PASSWORD` 环境变量覆盖 |
+| `.gitignore` | 忽略规则 | 排除依赖、构建产物、IDE 配置、本地私有配置与密钥 |
+| `sql/migrations/` | 历史库迁移脚本 | 去重、加唯一键、utf8mb4 转换等一次性脚本 |
+
+### 常见问题
+
+1. **安装依赖失败（CERT_HAS_EXPIRED）**：`.npmrc` 中的淘宝源证书过期，改用
+   `npm install --legacy-peer-deps --registry https://registry.npmmirror.com`。
+2. **dev 编译报 axios 语法错误**：确认 `build/webpack.base.conf.js` 的 babel `include` 包含 `node_modules/axios`，并重启 dev server。
+3. **图表空白**：echarts 5 需使用命名空间导入 `import * as echarts from 'echarts'`。
+
 ## 许可证
 
 本项目仅用于学习与课程设计交流。
