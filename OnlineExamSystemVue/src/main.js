@@ -5,7 +5,7 @@ import router from './router'
 import echarts from 'echarts'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-import VueCookies from 'vue-cookies'
+import Cookies from 'js-cookie'
 import '@/../config/initialize'
 import store from '@/store'
 import request from '@/api/request'
@@ -13,7 +13,12 @@ import './assets/font/iconfont.css'
 import './styles/index.css'
 
 Vue.use(ElementUI)
-Vue.use(VueCookies)
+// 用 js-cookie 适配原 vue-cookies 的 API（get 缺失返回 null）
+Vue.prototype.$cookies = {
+  get: key => (Cookies.get(key) === undefined ? null : Cookies.get(key)),
+  set: (key, value, options) => Cookies.set(key, value, options),
+  remove: key => Cookies.remove(key)
+}
 
 Vue.config.productionTip = false
 Vue.prototype.bus = new Vue()
