@@ -844,3 +844,116 @@ UPDATE `fill_question` SET `answer` = 'CERnet' WHERE `questionId` = 10004;
 UPDATE `fill_question` SET `answer` = '广域网|局域网|城域网' WHERE `questionId` = 10005;
 UPDATE `fill_question` SET `answer` = 'POP3|SMTP' WHERE `questionId` = 10006;
 UPDATE `fill_question` SET `answer` = '分组交换|电路交换' WHERE `questionId` = 10009;
+INSERT INTO `exam_manage` (examCode, description, source, paperId, examDate, totalTime, grade, term, major, institute, totalScore, type, tips) VALUES
+(20230028,'2024年上期期中作业','计算机网络',1019,'2026-04-10',90,'2024','1','软件工程','软件工程学院',0,'期中考试','闭卷，禁止切屏'),
+(20230029,'2024年上期随堂练习','数据结构',1020,'2026-04-15',45,'2024','1','计算机科学与技术','计算机学院',0,'随堂练习','可参考资料'),
+(20230030,'2024年下期期末作业','数据库理论',1021,'2026-06-20',120,'2024','2','软件工程','软件工程学院',0,'期末考试','需带学生证'),
+(20230031,'2024年下期补考','操作系统',1022,'2026-07-05',60,'2024','2','信息工程','信息工程学院',0,'补考','仅限补考学生')
+ON DUPLICATE KEY UPDATE description=VALUES(description);
+INSERT INTO `paper_manage` (paperId, questionType, questionId) VALUES (1019, 1, 20025) ON DUPLICATE KEY UPDATE questionId=VALUES(questionId);
+INSERT INTO `paper_manage` (paperId, questionType, questionId) VALUES (1019, 1, 20026) ON DUPLICATE KEY UPDATE questionId=VALUES(questionId);
+INSERT INTO `paper_manage` (paperId, questionType, questionId) VALUES (1019, 1, 20001) ON DUPLICATE KEY UPDATE questionId=VALUES(questionId);
+INSERT INTO `paper_manage` (paperId, questionType, questionId) VALUES (1019, 1, 20002) ON DUPLICATE KEY UPDATE questionId=VALUES(questionId);
+INSERT INTO `paper_manage` (paperId, questionType, questionId) VALUES (1019, 1, 20003) ON DUPLICATE KEY UPDATE questionId=VALUES(questionId);
+INSERT INTO `paper_manage` (paperId, questionType, questionId) VALUES (1019, 2, 20017) ON DUPLICATE KEY UPDATE questionId=VALUES(questionId);
+INSERT INTO `paper_manage` (paperId, questionType, questionId) VALUES (1019, 2, 20018) ON DUPLICATE KEY UPDATE questionId=VALUES(questionId);
+INSERT INTO `paper_manage` (paperId, questionType, questionId) VALUES (1019, 2, 20019) ON DUPLICATE KEY UPDATE questionId=VALUES(questionId);
+INSERT INTO `paper_manage` (paperId, questionType, questionId) VALUES (1019, 3, 20017) ON DUPLICATE KEY UPDATE questionId=VALUES(questionId);
+INSERT INTO `paper_manage` (paperId, questionType, questionId) VALUES (1019, 3, 20018) ON DUPLICATE KEY UPDATE questionId=VALUES(questionId);
+INSERT INTO `paper_manage` (paperId, questionType, questionId) VALUES (1020, 1, 20027) ON DUPLICATE KEY UPDATE questionId=VALUES(questionId);
+INSERT INTO `paper_manage` (paperId, questionType, questionId) VALUES (1020, 1, 20001) ON DUPLICATE KEY UPDATE questionId=VALUES(questionId);
+INSERT INTO `paper_manage` (paperId, questionType, questionId) VALUES (1020, 1, 20002) ON DUPLICATE KEY UPDATE questionId=VALUES(questionId);
+INSERT INTO `paper_manage` (paperId, questionType, questionId) VALUES (1020, 1, 20003) ON DUPLICATE KEY UPDATE questionId=VALUES(questionId);
+INSERT INTO `paper_manage` (paperId, questionType, questionId) VALUES (1020, 1, 20004) ON DUPLICATE KEY UPDATE questionId=VALUES(questionId);
+INSERT INTO `paper_manage` (paperId, questionType, questionId) VALUES (1020, 2, 20017) ON DUPLICATE KEY UPDATE questionId=VALUES(questionId);
+INSERT INTO `paper_manage` (paperId, questionType, questionId) VALUES (1020, 2, 20018) ON DUPLICATE KEY UPDATE questionId=VALUES(questionId);
+INSERT INTO `paper_manage` (paperId, questionType, questionId) VALUES (1020, 2, 20019) ON DUPLICATE KEY UPDATE questionId=VALUES(questionId);
+INSERT INTO `paper_manage` (paperId, questionType, questionId) VALUES (1020, 3, 20017) ON DUPLICATE KEY UPDATE questionId=VALUES(questionId);
+INSERT INTO `paper_manage` (paperId, questionType, questionId) VALUES (1020, 3, 20018) ON DUPLICATE KEY UPDATE questionId=VALUES(questionId);
+INSERT INTO `paper_manage` (paperId, questionType, questionId) VALUES (1021, 1, 20028) ON DUPLICATE KEY UPDATE questionId=VALUES(questionId);
+INSERT INTO `paper_manage` (paperId, questionType, questionId) VALUES (1021, 1, 20003) ON DUPLICATE KEY UPDATE questionId=VALUES(questionId);
+INSERT INTO `paper_manage` (paperId, questionType, questionId) VALUES (1021, 1, 20004) ON DUPLICATE KEY UPDATE questionId=VALUES(questionId);
+INSERT INTO `paper_manage` (paperId, questionType, questionId) VALUES (1021, 1, 20005) ON DUPLICATE KEY UPDATE questionId=VALUES(questionId);
+INSERT INTO `paper_manage` (paperId, questionType, questionId) VALUES (1021, 1, 20006) ON DUPLICATE KEY UPDATE questionId=VALUES(questionId);
+INSERT INTO `paper_manage` (paperId, questionType, questionId) VALUES (1021, 2, 20017) ON DUPLICATE KEY UPDATE questionId=VALUES(questionId);
+INSERT INTO `paper_manage` (paperId, questionType, questionId) VALUES (1021, 2, 20018) ON DUPLICATE KEY UPDATE questionId=VALUES(questionId);
+INSERT INTO `paper_manage` (paperId, questionType, questionId) VALUES (1021, 2, 20019) ON DUPLICATE KEY UPDATE questionId=VALUES(questionId);
+INSERT INTO `paper_manage` (paperId, questionType, questionId) VALUES (1021, 3, 20017) ON DUPLICATE KEY UPDATE questionId=VALUES(questionId);
+INSERT INTO `paper_manage` (paperId, questionType, questionId) VALUES (1021, 3, 20018) ON DUPLICATE KEY UPDATE questionId=VALUES(questionId);
+INSERT INTO `paper_manage` (paperId, questionType, questionId) VALUES (1022, 1, 20029) ON DUPLICATE KEY UPDATE questionId=VALUES(questionId);
+INSERT INTO `paper_manage` (paperId, questionType, questionId) VALUES (1022, 1, 20005) ON DUPLICATE KEY UPDATE questionId=VALUES(questionId);
+INSERT INTO `paper_manage` (paperId, questionType, questionId) VALUES (1022, 1, 20006) ON DUPLICATE KEY UPDATE questionId=VALUES(questionId);
+INSERT INTO `paper_manage` (paperId, questionType, questionId) VALUES (1022, 1, 20007) ON DUPLICATE KEY UPDATE questionId=VALUES(questionId);
+INSERT INTO `paper_manage` (paperId, questionType, questionId) VALUES (1022, 1, 20008) ON DUPLICATE KEY UPDATE questionId=VALUES(questionId);
+INSERT INTO `paper_manage` (paperId, questionType, questionId) VALUES (1022, 2, 20017) ON DUPLICATE KEY UPDATE questionId=VALUES(questionId);
+INSERT INTO `paper_manage` (paperId, questionType, questionId) VALUES (1022, 2, 20018) ON DUPLICATE KEY UPDATE questionId=VALUES(questionId);
+INSERT INTO `paper_manage` (paperId, questionType, questionId) VALUES (1022, 2, 20019) ON DUPLICATE KEY UPDATE questionId=VALUES(questionId);
+INSERT INTO `paper_manage` (paperId, questionType, questionId) VALUES (1022, 3, 20017) ON DUPLICATE KEY UPDATE questionId=VALUES(questionId);
+INSERT INTO `paper_manage` (paperId, questionType, questionId) VALUES (1022, 3, 20018) ON DUPLICATE KEY UPDATE questionId=VALUES(questionId);
+INSERT INTO `paper_manage` (paperId, questionType, questionId) VALUES (1019, 4, 20009) ON DUPLICATE KEY UPDATE questionId=VALUES(questionId);
+INSERT INTO `paper_manage` (paperId, questionType, questionId) VALUES (1020, 4, 20010) ON DUPLICATE KEY UPDATE questionId=VALUES(questionId);
+INSERT INTO `paper_manage` (paperId, questionType, questionId) VALUES (1021, 4, 20011) ON DUPLICATE KEY UPDATE questionId=VALUES(questionId);
+INSERT INTO `paper_manage` (paperId, questionType, questionId) VALUES (1022, 4, 20012) ON DUPLICATE KEY UPDATE questionId=VALUES(questionId);
+INSERT INTO `score` (examCode, studentId, subject, ptScore, etScore, dScore, score, answerDate) VALUES (20230028, 20225010, '计算机网络', 1, 72, 5, 60, '2026-06-23') ON DUPLICATE KEY UPDATE etScore=VALUES(etScore), dScore=VALUES(dScore);
+INSERT INTO `score` (examCode, studentId, subject, ptScore, etScore, dScore, score, answerDate) VALUES (20230028, 20225011, '计算机网络', 1, 88, 10, 60, '2026-06-24') ON DUPLICATE KEY UPDATE etScore=VALUES(etScore), dScore=VALUES(dScore);
+INSERT INTO `score` (examCode, studentId, subject, ptScore, etScore, dScore, score, answerDate) VALUES (20230029, 20225012, '计算机网络', 1, 64, 5, 60, '2026-06-25') ON DUPLICATE KEY UPDATE etScore=VALUES(etScore), dScore=VALUES(dScore);
+INSERT INTO `score` (examCode, studentId, subject, ptScore, etScore, dScore, score, answerDate) VALUES (20230029, 20225013, '计算机网络', 1, 90, 10, 60, '2026-06-26') ON DUPLICATE KEY UPDATE etScore=VALUES(etScore), dScore=VALUES(dScore);
+INSERT INTO `score` (examCode, studentId, subject, ptScore, etScore, dScore, score, answerDate) VALUES (20230030, 20225010, '计算机网络', 0, 56, 0, 60, '2026-06-23') ON DUPLICATE KEY UPDATE etScore=VALUES(etScore), dScore=VALUES(dScore);
+INSERT INTO `score` (examCode, studentId, subject, ptScore, etScore, dScore, score, answerDate) VALUES (20230030, 20225011, '计算机网络', 1, 78, 5, 60, '2026-06-24') ON DUPLICATE KEY UPDATE etScore=VALUES(etScore), dScore=VALUES(dScore);
+INSERT INTO `score` (examCode, studentId, subject, ptScore, etScore, dScore, score, answerDate) VALUES (20230031, 20225012, '计算机网络', 1, 82, 10, 60, '2026-06-25') ON DUPLICATE KEY UPDATE etScore=VALUES(etScore), dScore=VALUES(dScore);
+INSERT INTO `score` (examCode, studentId, subject, ptScore, etScore, dScore, score, answerDate) VALUES (20230031, 20225013, '计算机网络', 1, 68, 5, 60, '2026-06-26') ON DUPLICATE KEY UPDATE etScore=VALUES(etScore), dScore=VALUES(dScore);
+INSERT INTO `message` (id, title, content, time) VALUES (11, '补考安排咨询', '请问补考的题目和期末一样吗？', '2026-06-28') ON DUPLICATE KEY UPDATE title=VALUES(title);
+INSERT INTO `message` (id, title, content, time) VALUES (12, '组卷失败提示', '组卷时提示题目数量不足，怎么处理？', '2026-06-29') ON DUPLICATE KEY UPDATE title=VALUES(title);
+INSERT INTO `message` (id, title, content, time) VALUES (13, '成绩复核申请', '对主观题评分有疑问，可以复核吗？', '2026-07-01') ON DUPLICATE KEY UPDATE title=VALUES(title);
+INSERT INTO `message` (id, title, content, time) VALUES (14, '题库更新建议', '建议增加一些实际案例题。', '2026-07-02') ON DUPLICATE KEY UPDATE title=VALUES(title);
+INSERT INTO `replay` (messageId, replay, replayTime) VALUES (11, '补考题型一致，难度相当。', '2026-06-28');
+INSERT INTO `replay` (messageId, replay, replayTime) VALUES (11, '请以教务通知为准。', '2026-06-29');
+INSERT INTO `replay` (messageId, replay, replayTime) VALUES (12, '需要先在题库中补充对应科目题目。', '2026-06-29');
+INSERT INTO `replay` (messageId, replay, replayTime) VALUES (13, '可以，请在成绩公布一周内提交申请。', '2026-07-01');
+INSERT INTO `replay` (messageId, replay, replayTime) VALUES (14, '已记录，会在下学期题库中补充。', '2026-07-02');
+INSERT INTO `replay` (messageId, replay, replayTime) VALUES (14, '感谢建议。', '2026-07-03');
+INSERT INTO `da` (studentId, questionId, answerMe, isTag, scoreMe) VALUES (20225010, 20009, 'TCP 可靠有连接，UDP 快但不可靠。', 1, '4') ON DUPLICATE KEY UPDATE answerMe=VALUES(answerMe), isTag=VALUES(isTag), scoreMe=VALUES(scoreMe);
+INSERT INTO `da` (studentId, questionId, answerMe, isTag, scoreMe) VALUES (20225010, 20010, '栈用于中缀转后缀并求值。', 1, '5') ON DUPLICATE KEY UPDATE answerMe=VALUES(answerMe), isTag=VALUES(isTag), scoreMe=VALUES(scoreMe);
+INSERT INTO `da` (studentId, questionId, answerMe, isTag, scoreMe) VALUES (20225011, 20011, '列上加函数会导致索引失效。', 0, '4') ON DUPLICATE KEY UPDATE answerMe=VALUES(answerMe), isTag=VALUES(isTag), scoreMe=VALUES(scoreMe);
+INSERT INTO `da` (studentId, questionId, answerMe, isTag, scoreMe) VALUES (20225011, 20012, '重构不改行为，改功能会改行为。', 0, '5') ON DUPLICATE KEY UPDATE answerMe=VALUES(answerMe), isTag=VALUES(isTag), scoreMe=VALUES(scoreMe);
+INSERT INTO `da` (studentId, questionId, answerMe, isTag, scoreMe) VALUES (20225012, 20009, 'TCP 三次握手，UDP 直接发。', 0, '3') ON DUPLICATE KEY UPDATE answerMe=VALUES(answerMe), isTag=VALUES(isTag), scoreMe=VALUES(scoreMe);
+INSERT INTO `da` (studentId, questionId, answerMe, isTag, scoreMe) VALUES (20225013, 20010, '栈后进先出便于计算。', 0, '4') ON DUPLICATE KEY UPDATE answerMe=VALUES(answerMe), isTag=VALUES(isTag), scoreMe=VALUES(scoreMe);
+
+-- 新作业总分重算（选择/填空/判断 2 分，大题 5 分）
+UPDATE `exam_manage` e SET e.totalScore = (SELECT COALESCE(SUM(CASE WHEN pm.questionType = 4 THEN 5 ELSE 2 END),0) FROM paper_manage pm WHERE pm.paperId = e.paperId) WHERE e.examCode BETWEEN 20230028 AND 20230031;
+
+-- 各表补充：管理员/教师/学生/四类题库
+
+INSERT INTO `admin` (adminId, adminName, sex, tel, email, pwd, cardId, role) VALUES
+(9992,'教务管理员','女','13600001111','jw@oes.com','$2a$10$WqcbjOiItLfnRA.wog3mu.F7lvAAqcK1zXX4yaLAEwVYns0dzzx0C','110101199001010022','0'),
+(9993,'系统管理员','男','13600002222','sys@oes.com','$2a$10$WqcbjOiItLfnRA.wog3mu.F7lvAAqcK1zXX4yaLAEwVYns0dzzx0C','110101199001010033','0')
+ON DUPLICATE KEY UPDATE adminName=VALUES(adminName);
+INSERT INTO `teacher` (teacherId, teacherName, institute, sex, tel, email, pwd, cardId, type, role) VALUES
+(20081007,'赵敏','计算机学院','女','13500008881','zhaomin@oes.com','$2a$10$WqcbjOiItLfnRA.wog3mu.F7lvAAqcK1zXX4yaLAEwVYns0dzzx0C','465111111111111222','副教授','1'),
+(20081008,'钱学','软件工程学院','男','13500008882','qianxue@oes.com','$2a$10$WqcbjOiItLfnRA.wog3mu.F7lvAAqcK1zXX4yaLAEwVYns0dzzx0C','465111111111111333','讲师','1'),
+(20081009,'孙悦','信息工程学院','女','13500008883','sunyue@oes.com','$2a$10$WqcbjOiItLfnRA.wog3mu.F7lvAAqcK1zXX4yaLAEwVYns0dzzx0C','465111111111111444','助教','1')
+ON DUPLICATE KEY UPDATE teacherName=VALUES(teacherName);
+INSERT INTO `student` (studentId, studentName, grade, major, clazz, institute, tel, email, pwd, cardId, sex, role) VALUES
+(20225010,'冯程','2023','软件工程','2','软件工程学院','13700000010','feng@oes.com','$2a$10$WqcbjOiItLfnRA.wog3mu.F7lvAAqcK1zXX4yaLAEwVYns0dzzx0C','500234111114022410','男','2'),
+(20225011,'陈曦','2023','计算机科学与技术','1','计算机学院','13700000011','chen@oes.com','$2a$10$WqcbjOiItLfnRA.wog3mu.F7lvAAqcK1zXX4yaLAEwVYns0dzzx0C','500234111114022411','女','2'),
+(20225012,'魏然','2023','信息工程','2','信息工程学院','13700000012','wei@oes.com','$2a$10$WqcbjOiItLfnRA.wog3mu.F7lvAAqcK1zXX4yaLAEwVYns0dzzx0C','500234111114022412','男','2'),
+(20225013,'蒋雪','2024','网络工程','1','软件工程学院','13700000013','jiang@oes.com','$2a$10$WqcbjOiItLfnRA.wog3mu.F7lvAAqcK1zXX4yaLAEwVYns0dzzx0C','500234111114022413','女','2')
+ON DUPLICATE KEY UPDATE studentName=VALUES(studentName);
+INSERT INTO `multi_question` (questionId, subject, question, answerA, answerB, answerC, answerD, rightAnswer, analysis, score, section, level) VALUES (20025, '计算机网络', 'TCP 建立连接采用（ ）次握手', '1', '2', '3', '4', 'C', '', 2, '传输层', '2') ON DUPLICATE KEY UPDATE question=VALUES(question);
+INSERT INTO `multi_question` (questionId, subject, question, answerA, answerB, answerC, answerD, rightAnswer, analysis, score, section, level) VALUES (20026, '计算机网络', 'HTTP 状态码 404 表示（ ）', '服务器内部错误', '请求资源不存在', '请求成功', '重定向', 'B', '', 2, '应用层', '1') ON DUPLICATE KEY UPDATE question=VALUES(question);
+INSERT INTO `multi_question` (questionId, subject, question, answerA, answerB, answerC, answerD, rightAnswer, analysis, score, section, level) VALUES (20027, '数据结构', '顺序存储与链式存储相比，优点是（ ）', '插入删除快', '随机访问快', '存储密度低', '不需要连续空间', 'B', '', 2, '线性表', '2') ON DUPLICATE KEY UPDATE question=VALUES(question);
+INSERT INTO `multi_question` (questionId, subject, question, answerA, answerB, answerC, answerD, rightAnswer, analysis, score, section, level) VALUES (20028, '数据库理论', '下列哪个操作用于回滚事务（ ）', 'COMMIT', 'ROLLBACK', 'SAVEPOINT', 'GRANT', 'B', '', 2, '事务', '2') ON DUPLICATE KEY UPDATE question=VALUES(question);
+INSERT INTO `multi_question` (questionId, subject, question, answerA, answerB, answerC, answerD, rightAnswer, analysis, score, section, level) VALUES (20029, '操作系统', '进程调度算法中，平均等待时间通常最优的是（ ）', 'FCFS', 'SJF', '优先级', '时间片轮转', 'B', '', 2, '调度', '3') ON DUPLICATE KEY UPDATE question=VALUES(question);
+INSERT INTO `multi_question` (questionId, subject, question, answerA, answerB, answerC, answerD, rightAnswer, analysis, score, section, level) VALUES (20030, '软件工程', '下列不属于黑盒测试方法的是（ ）', '等价类划分', '边界值分析', '语句覆盖', '错误推测', 'C', '', 2, '测试', '3') ON DUPLICATE KEY UPDATE question=VALUES(question);
+INSERT INTO `fill_question` (questionId, subject, question, answer, analysis, score, level, section) VALUES (20017, '计算机网络', 'TCP 三次握手中，客户端发送的第一个报文标志位是____', 'SYN', '', 2, '2', '基础') ON DUPLICATE KEY UPDATE question=VALUES(question);
+INSERT INTO `fill_question` (questionId, subject, question, answer, analysis, score, level, section) VALUES (20018, '操作系统', '进程从运行态因为等待 I/O 而进入____态', '阻塞', '', 2, '2', '基础') ON DUPLICATE KEY UPDATE question=VALUES(question);
+INSERT INTO `fill_question` (questionId, subject, question, answer, analysis, score, level, section) VALUES (20019, '数据库理论', '用于限制查询结果行数的关键字是____', 'LIMIT', '', 2, '2', '基础') ON DUPLICATE KEY UPDATE question=VALUES(question);
+INSERT INTO `fill_question` (questionId, subject, question, answer, analysis, score, level, section) VALUES (20020, '软件工程', '衡量软件可维护性的重要指标之一是____', '可读性', '', 2, '2', '基础') ON DUPLICATE KEY UPDATE question=VALUES(question);
+INSERT INTO `judge_question` (questionId, subject, question, answer, analysis, score, level, section) VALUES (20017, '计算机网络', 'HTTPS 默认使用 443 端口', 'T', '', 2, '2', '基础') ON DUPLICATE KEY UPDATE question=VALUES(question);
+INSERT INTO `judge_question` (questionId, subject, question, answer, analysis, score, level, section) VALUES (20018, '数据结构', '链表的随机访问时间复杂度为 O(1)', 'F', '', 2, '2', '基础') ON DUPLICATE KEY UPDATE question=VALUES(question);
+INSERT INTO `judge_question` (questionId, subject, question, answer, analysis, score, level, section) VALUES (20019, '数据库理论', '一个表可以有多个唯一索引', 'T', '', 2, '2', '基础') ON DUPLICATE KEY UPDATE question=VALUES(question);
+INSERT INTO `judge_question` (questionId, subject, question, answer, analysis, score, level, section) VALUES (20020, '操作系统', '虚拟内存一定比物理内存快', 'F', '', 2, '2', '基础') ON DUPLICATE KEY UPDATE question=VALUES(question);
+INSERT INTO `da_question` (questionId, subject, question, answer, analysis, score, level, section) VALUES (20009, '计算机网络', '简述 TCP 与 UDP 的主要区别及各自适用场景。', 'TCP 面向连接、可靠、有序；UDP 无连接、开销小，适合实时音视频。', '从连接性、可靠性、开销三方面比较', 5, '3', '综合') ON DUPLICATE KEY UPDATE question=VALUES(question);
+INSERT INTO `da_question` (questionId, subject, question, answer, analysis, score, level, section) VALUES (20010, '数据结构', '说明栈在表达式求值中的作用。', '用栈保存运算符与操作数，按优先级出栈计算。', '说明入栈出栈规则', 5, '3', '综合') ON DUPLICATE KEY UPDATE question=VALUES(question);
+INSERT INTO `da_question` (questionId, subject, question, answer, analysis, score, level, section) VALUES (20011, '数据库理论', '简述索引失效的常见场景。', '对列使用函数、前导模糊匹配、类型隐式转换、联合索引不满足最左前缀。', '列举至少两种场景', 5, '3', '综合') ON DUPLICATE KEY UPDATE question=VALUES(question);
+INSERT INTO `da_question` (questionId, subject, question, answer, analysis, score, level, section) VALUES (20012, '软件工程', '简述代码重构与功能变更的区别。', '重构不改变外部行为，只改善结构；功能变更会改变行为。', '强调外部行为不变', 5, '3', '综合') ON DUPLICATE KEY UPDATE question=VALUES(question);
